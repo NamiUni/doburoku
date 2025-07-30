@@ -28,5 +28,5 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface KeyResolver {
-    String resolve(final String parentKey, final Method method);
+    String resolve(String parentKey, Method method);
 }
