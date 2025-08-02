@@ -21,23 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.core.argument;
+package io.github.namiuni.doburoku.api.providers;
 
-import java.lang.reflect.Parameter;
-import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.translation.Translatable;
+import org.jspecify.annotations.NullMarked;
 
-/**
- * Defines the contract for resolving method arguments into {@link ComponentLike} objects.
- */
-public interface ArgumentResolver {
+@NullMarked
+public interface TranslatableProvider<T> {
 
-    /**
-     * Resolves a method argument value into a {@link ComponentLike}.
-     *
-     * @param parameter the parameter metadata from the service interface
-     * @param value     the runtime argument value
-     * @param <T>       the type of the value
-     * @return a {@link ComponentLike} representation of the value
-     */
-    <T> ComponentLike resolve(Parameter parameter, T value);
+    Translatable get(T context);
 }

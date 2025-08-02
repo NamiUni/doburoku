@@ -21,12 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.core.key;
+package io.github.namiuni.doburoku.api.providers;
 
-import java.lang.reflect.Method;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public interface KeyResolver {
-    String resolve(String parentKey, Method method);
+public interface ResultProvider<T> {
+
+    <R> @Nullable R get(T context, Translatable translatable, ComponentLike[] arguments);
 }

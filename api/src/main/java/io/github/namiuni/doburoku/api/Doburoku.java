@@ -23,64 +23,63 @@
  */
 package io.github.namiuni.doburoku.api;
 
-import io.github.namiuni.doburoku.api.provider.ArgumentsProvider;
-import io.github.namiuni.doburoku.api.provider.KeyProvider;
-import io.github.namiuni.doburoku.api.provider.ResultProvider;
+import io.github.namiuni.doburoku.api.providers.ArgumentsProvider;
+import io.github.namiuni.doburoku.api.providers.ResultProvider;
+import io.github.namiuni.doburoku.api.providers.TranslatableProvider;
 import java.util.Objects;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public final class Doburoku<T> {
-    private final KeyProvider<T> keyProvider;
+    private final TranslatableProvider<T> translatableProvider;
     private final ArgumentsProvider<T> argumentsProvider;
     private final ResultProvider<T> resultProvider;
 
     private Doburoku(
-            KeyProvider<T> keyProvider,
-            ArgumentsProvider<T> argumentsProvider,
-            ResultProvider<T> resultProvider
+            final TranslatableProvider<T> translatableProvider,
+            final ArgumentsProvider<T> argumentsProvider,
+            final ResultProvider<T> resultProvider
     ) {
-        this.keyProvider = keyProvider;
+        this.translatableProvider = translatableProvider;
         this.argumentsProvider = argumentsProvider;
         this.resultProvider = resultProvider;
     }
 
-    public static <T> Doburoku<T> produce(
-            final KeyProvider<T> keyProvider,
+    public static <T> Doburoku<T> brew(
+            final TranslatableProvider<T> translatableProvider,
             final ArgumentsProvider<T> argumentsProvider,
-            final ResultProvider<T> resultProvider) {
-        return new Doburoku<>(keyProvider, argumentsProvider, resultProvider);
+            final ResultProvider<T> resultProvider
+    ) {
+        return new Doburoku<>(translatableProvider, argumentsProvider, resultProvider);
     }
 
     public <R> @Nullable R drunk(final T context) {
-        final String key = this.keyProvider.get(context);
+        final Translatable key = this.translatableProvider.get(context);
         final ComponentLike[] arguments = this.argumentsProvider.get(context);
-        final TranslatableComponent result = Component.translatable(key, arguments);
-        return this.resultProvider.get(context, result);
+        return this.resultProvider.get(context, key, arguments);
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         final Doburoku<?> doburoku = (Doburoku<?>) o;
-        return Objects.equals(keyProvider, doburoku.keyProvider) &&
+        return Objects.equals(translatableProvider, doburoku.translatableProvider) &&
                 Objects.equals(argumentsProvider, doburoku.argumentsProvider) &&
                 Objects.equals(resultProvider, doburoku.resultProvider);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.keyProvider, this.argumentsProvider, this.resultProvider);
+        return Objects.hash(this.translatableProvider, this.argumentsProvider, this.resultProvider);
     }
 
     @Override
     public String toString() {
         return "Doburoku[" +
-                "translationKeyProvider=" + this.keyProvider + ", " +
+                "translationKeyProvider=" + this.translatableProvider + ", " +
                 "translationArgumentsProvider=" + this.argumentsProvider + ", " +
                 "translationHandler=" + this.resultProvider + ']';
     }
