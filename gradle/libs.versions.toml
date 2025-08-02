@@ -4,10 +4,11 @@ shadow = "8.3.6"
 indra = "3.2.0"
 checkstyle = "10.26.0"
 jspecify = "1.0.0"
+google-auto-service = "1.1.1"
+junit = "5.13.4"
 
 # Java
 adventure = "4.23.0"
-google-auto-service = "1.1.1"
 geantyref = "2.0.1"
 
 [libraries]
@@ -16,8 +17,22 @@ shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version
 checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }
 indra-common = { group = "net.kyori", name = "indra-common", version.ref = "indra" }
 indra-licenser-spotless = { group = "net.kyori", name = "indra-licenser-spotless", version.ref = "indra" }
-adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
-google-auto-service = { group = "com.google.auto.service", name = "auto-service", version.ref = "google-auto-service"}
-google-auto-service-annotations = { group = "com.google.auto.service", name = "auto-service-annotations", version.ref = "google-auto-service"}
-geantyref = { group = "io.leangen.geantyref", name = "geantyref", version.ref = "geantyref"}
+adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
+google-auto-service = { group = "com.google.auto.service", name = "auto-service", version.ref = "google-auto-service" }
+google-auto-service-annotations = { group = "com.google.auto.service", name = "auto-service-annotations", version.ref = "google-auto-service" }
 jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
+
+# Java
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+geantyref = { group = "io.leangen.geantyref", name = "geantyref", version.ref = "geantyref" }
+
+# Testing
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junit-platform = { group = "org.junit.platform", name = "junit-platform-launcher" }
+
+[bundles]
+testing = [
+    "junit-api",
+    "junit-engine"
+]
