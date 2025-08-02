@@ -18,10 +18,12 @@ sequenceOf(
     "annotations",
     "annotation-processor",
     "bom",
-    "core",
-    "internal",
-    "minimessage",
-    "standard",
+    "api",
+    "reflect-api",
+    "reflect-core",
+    "reflect-internal",
+    "reflect-standard",
+    "reflect-minimessage"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)
