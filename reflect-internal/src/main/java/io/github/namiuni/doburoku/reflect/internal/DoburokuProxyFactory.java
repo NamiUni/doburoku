@@ -21,54 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.core;
+package io.github.namiuni.doburoku.reflect.internal;
 
-import io.github.namiuni.doburoku.core.argument.ArgumentResolver;
-import io.github.namiuni.doburoku.core.key.KeyResolver;
-import io.github.namiuni.doburoku.core.result.ResultHandler;
+import io.github.namiuni.doburoku.api.Doburoku;
 import java.lang.reflect.Proxy;
+import java.util.function.Supplier;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-final class TranslationServiceFactory {
-    private final ArgumentResolver argumentResolver;
-    private final ResultHandler resultHandler;
-    private final KeyResolver keyResolver;
-    private final String parentKey;
+public final class DoburokuProxyFactory {
 
-    TranslationServiceFactory(
-            final ArgumentResolver argumentResolver,
-            final ResultHandler resultHandler,
-            final KeyResolver keyResolver,
-            final String parentKey
-    ) {
-        this.argumentResolver = argumentResolver;
-        this.resultHandler = resultHandler;
-        this.keyResolver = keyResolver;
-        this.parentKey = parentKey;
+    private final Supplier<DoburokuInvocationHandler> invocationHandler;
+
+    private DoburokuProxyFactory(final Doburoku<DoburokuMethod> doburoku) {
+        this.invocationHandler = () -> new DoburokuInvocationHandler(doburoku, this);
     }
 
-    <I> I create(final Class<I> serviceInterface) {
-        final TranslationInvocationHandler rootHandler = new TranslationInvocationHandler(
-                this,
-                serviceInterface,
-                this.keyResolver,
-                this.parentKey
-        );
+    public static DoburokuProxyFactory of(final Doburoku<DoburokuMethod> doburoku) {
+        return new DoburokuProxyFactory(doburoku);
+    }
 
+    public <I> I create(final Class<I> serviceInterface) {
         @SuppressWarnings("unchecked") final I proxy = (I) Proxy.newProxyInstance(
                 serviceInterface.getClassLoader(),
                 new Class<?>[] {serviceInterface},
-                rootHandler
+                this.invocationHandler.get()
         );
         return proxy;
-    }
-
-    ArgumentResolver argumentResolver() {
-        return this.argumentResolver;
-    }
-
-    ResultHandler resultHandler() {
-        return this.resultHandler;
     }
 }
