@@ -21,28 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.core.result;
+package io.github.namiuni.doburoku.reflect.api.handlers;
 
-import java.lang.reflect.Type;
-import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
-/**
- * Defines the contract for handling a {@link TranslatableComponent} and converting it
- * to the method's expected return type.
- */
 @NullMarked
-public interface ResultHandler {
+public interface ArgumentResolver<T> {
 
-    /**
-     * Handles the generated {@link TranslatableComponent} and transforms it into the final return type.
-     *
-     * @param returnType the expected return type of the service method
-     * @param component  the component to process
-     * @param <R>        the generic return type
-     * @return the final, processed result
-     * @throws IllegalStateException if no handler is found for the given return type
-     */
-    <R> @Nullable R handle(Type returnType, TranslatableComponent component);
+    ComponentLike resolve(T value);
 }
