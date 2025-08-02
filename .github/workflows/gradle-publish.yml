@@ -36,7 +36,7 @@ jobs:
     - name: Publish snapshot to Sonatype
       run: ./gradlew publish
       env:
-          mavenCentralRepositoryUsername: ${{ secrets.MCR_USERNAME }}
-          mavenCentralRepositoryPassword: ${{ secrets.MCR_PASSWORD }}
+          sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+          sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
           signingKey: ${{ secrets.SIGNING_KEY }}
           signingPassword: ${{ secrets.SIGNING_PASSWORD }}
