@@ -37,7 +37,7 @@ jobs:
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish snapshot to Sonatype
-      run: ./gradlew publish --rerun-tasks
+      run: ./gradlew publish --debug
       env:
           sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
           sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
