@@ -6,10 +6,12 @@ plugins {
 }
 
 indra {
+    mitLicense()
     javaVersions {
         minimumToolchain(21)
         target(21)
     }
+    github("NamiUni", "doburoku")
 }
 
 indraSpotlessLicenser {

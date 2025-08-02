@@ -1,3 +1,6 @@
+[plugins]
+indra-publishing = { id = "net.kyori.indra.publishing.sonatype", version.ref = "indra" }
+
 [versions]
 # Tool
 shadow = "8.3.6"
@@ -13,7 +16,6 @@ geantyref = "2.0.1"
 
 [libraries]
 # Tool
-shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow" }
 checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }
 indra-common = { group = "net.kyori", name = "indra-common", version.ref = "indra" }
 indra-licenser-spotless = { group = "net.kyori", name = "indra-licenser-spotless", version.ref = "indra" }
