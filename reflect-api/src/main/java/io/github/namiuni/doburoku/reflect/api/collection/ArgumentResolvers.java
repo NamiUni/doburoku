@@ -27,49 +27,59 @@ import io.github.namiuni.doburoku.reflect.api.handlers.ArgumentResolver;
 import io.leangen.geantyref.TypeToken;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A collection for registering and managing {@link ArgumentResolver} instances.
+ * <p>
+ * This interface provides a builder-style API for adding resolvers for different
+ * data types, allowing for custom serialization of objects into {@link net.kyori.adventure.text.ComponentLike}
+ * arguments for translation.
+ */
 @NullMarked
 public interface ArgumentResolvers {
 
     /**
-     * Adds a {@link ArgumentResolver} for a specific type with a given priority.
+     * Adds an {@link ArgumentResolver} for a specific type with a given priority.
+     * <p>
+     * Resolvers with higher priority values are checked before resolvers with lower values.
      *
-     * @param type     the type to handle
-     * @param resolver the resolver for the type
-     * @param priority the priority of the resolver (higher values are checked first)
+     * @param type     the {@link Class} of the type to handle
+     * @param resolver the resolver for the specified type
+     * @param priority the priority of the resolver
      * @param <T>      the type
-     * @return this builder
+     * @return this {@link ArgumentResolvers} instance for chaining
      */
-
     <T> ArgumentResolvers add(Class<T> type, ArgumentResolver<T> resolver, int priority);
 
     /**
-     * Adds a {@link ArgumentResolver} for a specific generic type with a given priority.
+     * Adds an {@link ArgumentResolver} for a specific generic type with a given priority.
+     * <p>
+     * Resolvers with higher priority values are checked before resolvers with lower values.
      *
-     * @param type     the {@link TypeToken} to handle
-     * @param resolver the resolver for the type
-     * @param priority the priority of the resolver (higher values are checked first)
+     * @param type     the {@link TypeToken} representing the type to handle
+     * @param resolver the resolver for the specified type
+     * @param priority the priority of the resolver
      * @param <T>      the type
-     * @return this builder
+     * @return this {@link ArgumentResolvers} instance for chaining
      */
     <T> ArgumentResolvers add(TypeToken<T> type, ArgumentResolver<T> resolver, int priority);
 
     /**
-     * Adds a {@link ArgumentResolver} for a specific type with default priority (0).
+     * Adds an {@link ArgumentResolver} for a specific type with default priority (0).
      *
-     * @param type     the type to handle
-     * @param resolver the resolver for the type
+     * @param type     the {@link Class} of the type to handle
+     * @param resolver the resolver for the specified type
      * @param <T>      the type
-     * @return this builder
+     * @return this {@link ArgumentResolvers} instance for chaining
      */
     <T> ArgumentResolvers add(Class<T> type, ArgumentResolver<T> resolver);
 
     /**
-     * Adds a {@link ArgumentResolver} for a specific generic type with default priority (0).
+     * Adds an {@link ArgumentResolver} for a specific generic type with default priority (0).
      *
-     * @param type     the {@link TypeToken} to handle
-     * @param resolver the resolver for the type
+     * @param type     the {@link TypeToken} representing the type to handle
+     * @param resolver the resolver for the specified type
      * @param <T>      the type
-     * @return this builder
+     * @return this {@link ArgumentResolvers} instance for chaining
      */
     <T> ArgumentResolvers add(TypeToken<T> type, ArgumentResolver<T> resolver);
 }

@@ -23,7 +23,7 @@
  */
 package io.github.namiuni.doburoku.reflect.minimessage;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import net.kyori.adventure.text.Component;

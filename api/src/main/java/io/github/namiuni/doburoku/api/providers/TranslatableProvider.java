@@ -26,8 +26,20 @@ package io.github.namiuni.doburoku.api.providers;
 import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A provider that supplies a {@link Translatable} object, which typically
+ * represents a translation key.
+ *
+ * @param <T> the type of the context object used to determine the translation key.
+ */
 @NullMarked
 public interface TranslatableProvider<T> {
 
+    /**
+     * Gets the {@link Translatable} object based on the provided context.
+     *
+     * @param context the context object.
+     * @return the {@link Translatable} to be used for translation.
+     */
     Translatable get(T context);
 }

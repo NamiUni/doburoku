@@ -24,8 +24,8 @@
 package io.github.namiuni.doburoku.reflect.internal.collection;
 
 import io.github.namiuni.doburoku.reflect.api.collection.ComponentHandlers;
-import io.github.namiuni.doburoku.reflect.internal.common.TypedProvider;
 import io.github.namiuni.doburoku.reflect.api.handlers.ComponentHandler;
+import io.github.namiuni.doburoku.reflect.internal.common.TypedProvider;
 import io.leangen.geantyref.TypeToken;
 import java.util.ArrayList;
 import java.util.List;

@@ -28,8 +28,26 @@ import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * A provider that processes a translation key and its arguments to produce a final result.
+ * <p>
+ * This interface is responsible for taking the constituent parts of a translation
+ * (the key and arguments) and performing the final action, such as creating a
+ * {@link net.kyori.adventure.text.TranslatableComponent} and returning it.
+ *
+ * @param <T> the type of the context object.
+ */
 @NullMarked
 public interface ResultProvider<T> {
 
+    /**
+     * Generates a result from the given translation components.
+     *
+     * @param context      the context object.
+     * @param translatable the translation key.
+     * @param arguments    the resolved translation arguments.
+     * @param <R>          the type of the result.
+     * @return the final product of the translation, which may be {@code null}.
+     */
     <R> @Nullable R get(T context, Translatable translatable, ComponentLike[] arguments);
 }

@@ -23,7 +23,9 @@
  */
 package io.github.namiuni.doburoku.reflect.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import io.leangen.geantyref.TypeToken;
 import java.io.PrintStream;
 import java.util.List;

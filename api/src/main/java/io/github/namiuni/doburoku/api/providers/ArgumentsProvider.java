@@ -26,8 +26,19 @@ package io.github.namiuni.doburoku.api.providers;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A provider that supplies an array of {@link ComponentLike} arguments for a translation.
+ *
+ * @param <T> the type of the context object used to generate the arguments.
+ */
 @NullMarked
 public interface ArgumentsProvider<T> {
 
+    /**
+     * Gets the arguments for the translation based on the provided context.
+     *
+     * @param context the context object
+     * @return an array of {@link ComponentLike} arguments
+     */
     ComponentLike[] get(T context);
 }

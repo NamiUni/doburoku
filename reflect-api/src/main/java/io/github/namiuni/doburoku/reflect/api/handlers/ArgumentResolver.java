@@ -26,8 +26,22 @@ package io.github.namiuni.doburoku.reflect.api.handlers;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Resolves an object of type {@code T} into a {@link ComponentLike} representation.
+ * <p>
+ * This is used to convert arbitrary objects into components that can be inserted as
+ * arguments into a {@link net.kyori.adventure.text.TranslatableComponent}.
+ *
+ * @param <T> the type of the value to resolve
+ */
 @NullMarked
 public interface ArgumentResolver<T> {
 
+    /**
+     * Resolves the given value into a {@link ComponentLike}.
+     *
+     * @param value the value to resolve
+     * @return the resolved {@link ComponentLike}
+     */
     ComponentLike resolve(T value);
 }

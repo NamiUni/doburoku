@@ -24,8 +24,8 @@
 package io.github.namiuni.doburoku.reflect.internal.registry;
 
 import io.github.namiuni.doburoku.api.providers.ResultProvider;
-import io.github.namiuni.doburoku.reflect.internal.DoburokuMethod;
 import io.github.namiuni.doburoku.reflect.api.handlers.ComponentHandler;
+import io.github.namiuni.doburoku.reflect.internal.DoburokuMethod;
 import java.lang.reflect.Type;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;

@@ -32,12 +32,28 @@ import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * The main class for the Doburoku translation library, orchestrating the translation process.
+ * <p>
+ * Doburoku (濁酒) is a type of unrefined sake, and this class "brews" a translation
+ * by combining a translation key, its arguments, and a final processing step.
+ * It is instantiated using providers for each part of the translation process.
+ *
+ * @param <T> the type of the context object which provides information for translation
+ */
 @NullMarked
 public final class Doburoku<T> {
     private final TranslatableProvider<T> translatableProvider;
     private final ArgumentsProvider<T> argumentsProvider;
     private final ResultProvider<T> resultProvider;
 
+    /**
+     * Constructs a new Doburoku instance.
+     *
+     * @param translatableProvider the provider for the translation key
+     * @param argumentsProvider    the provider for the translation arguments
+     * @param resultProvider       the provider that handles the final result
+     */
     private Doburoku(
             final TranslatableProvider<T> translatableProvider,
             final ArgumentsProvider<T> argumentsProvider,
@@ -48,6 +64,15 @@ public final class Doburoku<T> {
         this.resultProvider = resultProvider;
     }
 
+    /**
+     * Creates, or "brews," a new {@link Doburoku} instance with the specified providers.
+     *
+     * @param translatableProvider the provider for the {@link Translatable} key
+     * @param argumentsProvider    the provider for the translation arguments
+     * @param resultProvider       the provider that processes the final {@link net.kyori.adventure.text.TranslatableComponent}
+     * @param <T>                  the type of the context object
+     * @return a new {@link Doburoku} instance
+     */
     public static <T> Doburoku<T> brew(
             final TranslatableProvider<T> translatableProvider,
             final ArgumentsProvider<T> argumentsProvider,
@@ -56,6 +81,16 @@ public final class Doburoku<T> {
         return new Doburoku<>(translatableProvider, argumentsProvider, resultProvider);
     }
 
+    /**
+     * Executes the translation process, or gets "drunk," using the given context.
+     * <p>
+     * This method retrieves the translation key and arguments, then passes them to the
+     * result provider to generate the final output.
+     *
+     * @param context the context object supplying data for the translation
+     * @param <R>     the type of the returned result
+     * @return the processed result, or {@code null} if the {@link ResultProvider} yields no result
+     */
     public <R> @Nullable R drunk(final T context) {
         final Translatable key = this.translatableProvider.get(context);
         final ComponentLike[] arguments = this.argumentsProvider.get(context);
@@ -66,9 +101,9 @@ public final class Doburoku<T> {
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         final Doburoku<?> doburoku = (Doburoku<?>) o;
-        return Objects.equals(translatableProvider, doburoku.translatableProvider) &&
-                Objects.equals(argumentsProvider, doburoku.argumentsProvider) &&
-                Objects.equals(resultProvider, doburoku.resultProvider);
+        return Objects.equals(this.translatableProvider, doburoku.translatableProvider) &&
+                Objects.equals(this.argumentsProvider, doburoku.argumentsProvider) &&
+                Objects.equals(this.resultProvider, doburoku.resultProvider);
     }
 
     @Override

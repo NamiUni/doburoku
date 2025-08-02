@@ -30,6 +30,15 @@ import java.util.stream.Collectors;
 import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A standard implementation of {@link TranslatableResolver} that generates translation keys
+ * based on class and method names.
+ * <p>
+ * This resolver constructs a key by joining the formatted names of the declaring classes
+ * and the method name, using a configurable delimiter and prefix. For example, a call to
+ * {@code my.package.MyService.NestedService.getMessage()} could be resolved to a key like
+ * {@code "my.prefix.my.service.nested.service.getMessage"}.
+ */
 @NullMarked
 public final class StandardTranslatableResolver implements TranslatableResolver {
 
@@ -47,11 +56,22 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         this.separatePattern = separatePattern;
     }
 
+    /**
+     * Creates a new resolver with default settings (empty prefix, '.' delimiter, camel-case splitter).
+     *
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create() {
         final String prefix = "";
         return StandardTranslatableResolver.create(prefix);
     }
 
+    /**
+     * Creates a new resolver with a specified prefix.
+     *
+     * @param prefix the prefix to prepend to all generated keys
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create(
             final String prefix
     ) {
@@ -59,6 +79,13 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         return StandardTranslatableResolver.create(prefix, delimiter);
     }
 
+    /**
+     * Creates a new resolver with a specified prefix and delimiter.
+     *
+     * @param prefix    the prefix to prepend to all generated keys
+     * @param delimiter the character used to separate parts of the key
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create(
             final String prefix,
             final char delimiter
@@ -67,6 +94,13 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         return StandardTranslatableResolver.create(prefix, delimiter, camelPattern);
     }
 
+    /**
+     * Creates a new resolver with a specified prefix and splitting pattern.
+     *
+     * @param prefix  the prefix to prepend to all generated keys
+     * @param pattern the regex pattern used to split class names into parts (e.g., to break up camelCase)
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create(
             final String prefix,
             final Pattern pattern
@@ -75,6 +109,13 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         return StandardTranslatableResolver.create(prefix, delimiter, pattern);
     }
 
+    /**
+     * Creates a new resolver with a specified delimiter and splitting pattern.
+     *
+     * @param delimiter the character used to separate parts of the key
+     * @param pattern   the regex pattern used to split class names into parts
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create(
             final char delimiter,
             final Pattern pattern
@@ -83,6 +124,14 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         return StandardTranslatableResolver.create(prefix, delimiter, pattern);
     }
 
+    /**
+     * Creates a new resolver with a specified prefix, delimiter, and splitting pattern.
+     *
+     * @param prefix       the prefix to prepend to all generated keys
+     * @param delimiter    the character used to separate parts of the key
+     * @param splitPattern the regex pattern used to split class names into parts
+     * @return a new {@link StandardTranslatableResolver} instance
+     */
     public static StandardTranslatableResolver create(
             final String prefix,
             final char delimiter,
@@ -91,6 +140,12 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         return new StandardTranslatableResolver(prefix, delimiter, splitPattern);
     }
 
+    /**
+     * Resolves a {@link Translatable} key from the given method.
+     *
+     * @param method the method to resolve the key from
+     * @return the resolved {@link Translatable} key
+     */
     @Override
     public Translatable resolve(final Method method) {
         final StringBuilder builder = new StringBuilder();
@@ -104,12 +159,12 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
         if (parentClass == null) {
             builder.append(this.prefix).append(this.delimiter);
         } else {
-            getPath(builder, parentClass);
+            this.getPath(builder, parentClass);
             final String formatted = this.separatePattern
                     .splitAsStream(currentClass.getSimpleName())
                     .map(String::toLowerCase)
                     .collect(Collectors.joining(String.valueOf(this.delimiter)))
-                    .transform(s -> s + delimiter);
+                    .transform(s -> s + this.delimiter);
             builder.append(formatted);
         }
     }

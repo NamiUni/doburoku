@@ -31,6 +31,17 @@ import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.renderer.ComponentRenderer;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A {@link ComponentRenderer} that transforms a {@link Component} into a MiniMessage
+ * named placeholder.
+ * <p>
+ * This renderer takes a resolved component and wraps it in a MiniMessage {@link Argument},
+ * using the associated method parameter's name as the placeholder tag. The parameter name
+ * is converted from camelCase to snake_case (e.g., {@code "userName"} becomes {@code "user_name"}).
+ * The result can be used directly in MiniMessage templates via tags like {@code <user_name>}.
+ * <p>
+ * This class is a singleton and can be accessed via {@link #instance()}.
+ */
 @NullMarked
 public final class MiniMessagePlaceholderRenderer implements ComponentRenderer<Parameter> {
 
@@ -40,10 +51,23 @@ public final class MiniMessagePlaceholderRenderer implements ComponentRenderer<P
     private MiniMessagePlaceholderRenderer() {
     }
 
+    /**
+     * Gets the singleton instance of this renderer.
+     *
+     * @return the {@link MiniMessagePlaceholderRenderer} instance
+     */
     public static MiniMessagePlaceholderRenderer instance() {
         return INSTANCE;
     }
 
+    /**
+     * Renders the given component as a MiniMessage placeholder, using the context
+     * parameter to determine the placeholder's name.
+     *
+     * @param component the component to be wrapped in a placeholder
+     * @param context   the method {@link Parameter} from which the placeholder name will be derived
+     * @return a component representing a MiniMessage placeholder argument
+     */
     @Override
     @SuppressWarnings("PatternValidation")
     public Component render(final Component component, final Parameter context) {

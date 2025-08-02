@@ -27,9 +27,21 @@ import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * A functional interface that handles a {@link TranslatableComponent} and transforms it
+ * into a result of a specific type.
+ *
+ * @param <R> the return type of the handler.
+ */
 @NullMarked
 @FunctionalInterface
 public interface ComponentHandler<R> {
 
+    /**
+     * Handles the given {@link TranslatableComponent}.
+     *
+     * @param component the component to handle
+     * @return the result of the handling, which may be {@code null}
+     */
     @Nullable R handle(TranslatableComponent component);
 }

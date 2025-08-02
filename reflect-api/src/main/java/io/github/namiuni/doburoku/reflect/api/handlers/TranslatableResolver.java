@@ -27,9 +27,21 @@ import java.lang.reflect.Method;
 import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A functional interface for resolving a {@link Translatable} object from a {@link Method}.
+ * <p>
+ * This is intended for reflection-based systems where a method itself dictates the
+ * translation key, for example, by using an annotation on the method.
+ */
 @NullMarked
 @FunctionalInterface
 public interface TranslatableResolver {
 
+    /**
+     * Resolves a {@link Translatable} key from the given method.
+     *
+     * @param method the method to resolve the key from
+     * @return the resolved {@link Translatable} key
+     */
     Translatable resolve(Method method);
 }

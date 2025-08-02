@@ -23,7 +23,7 @@
  */
 package io.github.namiuni.doburoku.reflect.messageformat;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Method;
 import net.kyori.adventure.translation.Translatable;
 import org.junit.jupiter.api.Test;

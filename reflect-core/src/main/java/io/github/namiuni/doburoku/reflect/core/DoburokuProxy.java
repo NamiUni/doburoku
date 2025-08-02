@@ -45,6 +45,17 @@ import net.kyori.adventure.text.renderer.ComponentRenderer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * A factory for creating a dynamic proxy of a service interface that uses the Doburoku
+ * translation framework.
+ * <p>
+ * This class provides a builder-style interface to configure how method calls on a
+ * target interface are translated into rich-text {@link Component} messages. It allows
+ * specifying resolvers for translation keys, handlers for method arguments, and processors
+ * for the final result.
+ *
+ * @param <I> the service interface type for which a proxy will be created
+ */
 @NullMarked
 public final class DoburokuProxy<I> {
 
@@ -58,36 +69,87 @@ public final class DoburokuProxy<I> {
         this.serviceInterface = serviceInterface;
     }
 
+    /**
+     * Creates a new {@link DoburokuProxy} builder for the given service interface.
+     *
+     * @param serviceInterface the interface class to be proxied
+     * @param <I>              the type of the service interface
+     * @return a new {@link DoburokuProxy} instance
+     */
     public static <I> DoburokuProxy<I> from(final Class<I> serviceInterface) {
         return new DoburokuProxy<>(serviceInterface);
     }
 
+    /**
+     * Sets the resolver that determines the translation key for each method call.
+     *
+     * @param resolver the {@link TranslatableResolver} to use
+     * @return this builder instance for chaining
+     */
     public DoburokuProxy<I> translatable(final TranslatableResolver resolver) {
         this.translatableResolver = resolver;
         return this;
     }
 
+    /**
+     * Configures the argument resolvers.
+     *
+     * @param resolvers a consumer that provides access to the {@link ArgumentResolvers} collection
+     * @return this builder instance for chaining
+     */
     public DoburokuProxy<I> argument(final Consumer<ArgumentResolvers> resolvers) {
         this.argument(resolvers, null);
         return this;
     }
 
+    /**
+     * Configures the argument resolvers and an optional final transformer.
+     * <p>
+     * The transformer can be used to wrap resolved arguments, for example, by turning them
+     * into named placeholders for a templating engine like MiniMessage.
+     *
+     * @param resolvers   a consumer that provides access to the {@link ArgumentResolvers} collection
+     * @param transformer an optional {@link ComponentRenderer} to transform the final resolved argument
+     * @return this builder instance for chaining
+     */
     public DoburokuProxy<I> argument(final Consumer<ArgumentResolvers> resolvers, final @Nullable ComponentRenderer<Parameter> transformer) {
         resolvers.accept(this.argumentResolvers);
         this.argumentTransformer = transformer;
         return this;
     }
 
+    /**
+     * Sets the final transformer for resolved arguments.
+     *
+     * @param transformer the {@link ComponentRenderer} to use for transforming arguments
+     * @return this builder instance for chaining
+     */
     public DoburokuProxy<I> argument(final @Nullable ComponentRenderer<Parameter> transformer) {
         this.argumentTransformer = transformer;
         return this;
     }
 
+    /**
+     * Configures the result handlers which process the final translated component.
+     *
+     * @param handlers a consumer that provides access to the {@link ComponentHandlers} collection
+     * @return this builder instance for chaining
+     */
     public DoburokuProxy<I> result(final Consumer<ComponentHandlers> handlers) {
         handlers.accept(this.resultHandlers);
         return this;
     }
 
+    /**
+     * "Brews" the final proxy instance based on the provided configuration.
+     * <p>
+     * This method assembles all the configured resolvers and handlers, creates a
+     * {@link Doburoku} instance to manage the translation logic, and constructs
+     * the proxy.
+     *
+     * @return a new proxy instance of the service interface {@code I}
+     * @throws NullPointerException if a {@link TranslatableResolver} has not been set
+     */
     public I brew() {
         Objects.requireNonNull(this.translatableResolver);
 

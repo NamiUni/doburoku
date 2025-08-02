@@ -33,20 +33,20 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class ArgumentResolversImpl implements ArgumentResolvers {
-    private final List<TypedProvider<ArgumentResolver<?>>> ArgumentProviders = new ArrayList<>();
+    private final List<TypedProvider<ArgumentResolver<?>>> argumentProviders = new ArrayList<>();
 
     public ArgumentResolversImpl() {
     }
 
     @Override
     public <T> ArgumentResolvers add(final Class<T> type, final ArgumentResolver<T> resolver, final int priority) {
-        this.ArgumentProviders.add(new TypedProvider<>(type, resolver, priority));
+        this.argumentProviders.add(new TypedProvider<>(type, resolver, priority));
         return this;
     }
 
     @Override
     public <T> ArgumentResolvers add(final TypeToken<T> type, final ArgumentResolver<T> resolver, final int priority) {
-        this.ArgumentProviders.add(new TypedProvider<>(type.getType(), resolver, priority));
+        this.argumentProviders.add(new TypedProvider<>(type.getType(), resolver, priority));
         return this;
     }
 
@@ -61,6 +61,6 @@ public final class ArgumentResolversImpl implements ArgumentResolvers {
     }
 
     public List<TypedProvider<ArgumentResolver<?>>> get() {
-        return this.ArgumentProviders;
+        return this.argumentProviders;
     }
 }
