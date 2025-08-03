@@ -9,7 +9,6 @@ version = projectVersion
 dependencies {
     api(projects.doburokuApi)
     api(projects.doburokuReflectApi)
-    api(libs.geantyref)
 }
 
 tasks.javadoc {

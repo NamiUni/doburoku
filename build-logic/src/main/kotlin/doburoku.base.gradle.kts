@@ -10,6 +10,10 @@ java {
     }
 }
 
+checkstyle {
+    toolVersion = libs.versions.checkstyle.get()
+}
+
 spotless {
     java {
         licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
