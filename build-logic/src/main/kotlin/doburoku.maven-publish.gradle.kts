@@ -1,11 +1,22 @@
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
 plugins {
     id("java-library")
-    id("doburoku.base")
     id("com.vanniktech.maven.publish")
 }
 
 mavenPublishing {
+    publishToMavenCentral()
     signAllPublications()
+
+    configure(
+        JavaLibrary(
+            javadocJar = JavadocJar.Javadoc(),
+            sourcesJar = true,
+        )
+    )
+
     pom {
         name.set("doburoku")
         description.set("An Adventure-focused library inspired by Moonshine.")

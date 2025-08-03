@@ -16,6 +16,7 @@ pluginManagement {
 
 sequenceOf(
     "api",
+    "bom",
     "reflect-api",
     "reflect-core",
     "reflect-internal",

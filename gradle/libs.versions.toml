@@ -1,7 +1,7 @@
 [versions]
 # Tool
 indra = "3.2.0"
-checkstyle = "10.26.0"
+checkstyle = "10.26.1"
 jspecify = "1.0.0"
 google-auto-service = "1.1.1"
 junit = "5.13.4"

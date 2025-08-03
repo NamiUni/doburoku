@@ -1,21 +1,25 @@
 plugins {
     id("java-library")
-    id("net.kyori.indra")
-    id("net.kyori.indra.checkstyle")
-    id("net.kyori.indra.licenser.spotless")
+    id("checkstyle")
+    id("com.diffplug.spotless")
 }
 
-indra {
-    mitLicense()
-    javaVersions {
-        minimumToolchain(21)
-        target(21)
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
-    github("NamiUni", "doburoku")
 }
 
-indraSpotlessLicenser {
-    licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
+spotless {
+    java {
+        licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 tasks.compileJava {
@@ -24,6 +28,5 @@ tasks.compileJava {
 }
 
 dependencies {
-    checkstyle(libs.checkstyle)
     compileOnlyApi(libs.jspecify)
 }
