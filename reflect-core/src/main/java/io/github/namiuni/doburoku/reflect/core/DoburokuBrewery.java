@@ -41,51 +41,53 @@ import java.lang.reflect.Parameter;
 import java.util.Objects;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.renderer.ComponentRenderer;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A factory for creating a dynamic proxy of a service interface.
+ * A "brewery" for creating dynamic proxies of service interfaces, much like
+ * how Doburoku (Japanese moonshine) is brewed.
  * <p>
  * This class provides a builder-style interface to configure how method calls on a
- * target interface are translated into rich-text {@link Component} messages. It allows
- * specifying resolvers for translation keys, handlers for method arguments, and processors
- * for the final result.
+ * target interface are processed to produce {@link TranslatableComponent} instances.
+ * It allows specifying resolvers for translation keys, handlers for method arguments, and processors
+ * for the result.
  *
- * @param <I> the service interface type for which a proxy will be created
+ * @param <I> the service interface type for which a proxy will be "brewed"
  */
 @NullMarked
-public final class DoburokuProxy<I> {
+public final class DoburokuBrewery<I> {
 
     private final Class<I> serviceInterface;
-    private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create();
+    private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create("");
     private final ArgumentResolversImpl argumentResolvers = new ArgumentResolversImpl();
     private @Nullable ComponentRenderer<Parameter> argumentTransformer;
     private final ComponentHandlersImpl resultHandlers = new ComponentHandlersImpl();
 
-    private DoburokuProxy(final Class<I> serviceInterface) {
+    private DoburokuBrewery(final Class<I> serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
     /**
-     * Creates a new {@link DoburokuProxy} builder for the given service interface.
+     * Creates a new {@link DoburokuBrewery} instance for the given service interface.
      *
      * @param serviceInterface the interface class to be proxied
      * @param <I>              the type of the service interface
-     * @return a new {@link DoburokuProxy} instance
+     * @return a new {@link DoburokuBrewery} instance
      */
-    public static <I> DoburokuProxy<I> from(final Class<I> serviceInterface) {
-        return new DoburokuProxy<>(serviceInterface);
+    public static <I> DoburokuBrewery<I> from(final Class<I> serviceInterface) {
+        return new DoburokuBrewery<>(serviceInterface);
     }
 
     /**
      * Sets the resolver that determines the translation key for each method call.
      *
      * @param resolver the {@link TranslatableResolver} to use
-     * @return this builder instance for chaining
+     * @return this brewery instance for chaining
      */
-    public DoburokuProxy<I> translatable(final TranslatableResolver resolver) {
+    public DoburokuBrewery<I> translatable(final TranslatableResolver resolver) {
         this.translatableResolver = resolver;
         return this;
     }
@@ -94,57 +96,57 @@ public final class DoburokuProxy<I> {
      * Configures the argument resolvers.
      *
      * @param resolvers a consumer that provides access to the {@link ArgumentResolvers} collection
-     * @return this builder instance for chaining
+     * @return this brewery instance for chaining
      */
-    public DoburokuProxy<I> argument(final Consumer<ArgumentResolvers> resolvers) {
+    public DoburokuBrewery<I> argument(final Consumer<ArgumentResolvers> resolvers) {
         this.argument(resolvers, null);
         return this;
     }
 
     /**
-     * Configures the argument resolvers and an optional final transformer.
+     * Configures the argument resolvers and an optional transformer.
      * <p>
      * The transformer can be used to wrap resolved arguments, for example, by turning them
-     * into named placeholders for a templating engine like MiniMessage.
+     * into named placeholders for a templating engine like {@code MiniMessage}.
      *
      * @param resolvers   a consumer that provides access to the {@link ArgumentResolvers} collection
-     * @param transformer an optional {@link ComponentRenderer} to transform the final resolved argument
-     * @return this builder instance for chaining
+     * @param transformer an optional {@link ComponentRenderer} to transform the resolved argument
+     * @return this brewery instance for chaining
      */
-    public DoburokuProxy<I> argument(final Consumer<ArgumentResolvers> resolvers, final @Nullable ComponentRenderer<Parameter> transformer) {
+    public DoburokuBrewery<I> argument(final Consumer<ArgumentResolvers> resolvers, final @Nullable ComponentRenderer<Parameter> transformer) {
         resolvers.accept(this.argumentResolvers);
         this.argumentTransformer = transformer;
         return this;
     }
 
     /**
-     * Sets the final transformer for resolved arguments.
+     * Sets the transformer for resolved arguments.
      *
      * @param transformer the {@link ComponentRenderer} to use for transforming arguments
-     * @return this builder instance for chaining
+     * @return this brewery instance for chaining
      */
-    public DoburokuProxy<I> argument(final @Nullable ComponentRenderer<Parameter> transformer) {
+    public DoburokuBrewery<I> argument(final @Nullable ComponentRenderer<Parameter> transformer) {
         this.argumentTransformer = transformer;
         return this;
     }
 
     /**
-     * Configures the result handlers which process the final translated component.
+     * Configures the result handlers which process the {@link TranslatableComponent} produced by the brewery.
      *
      * @param handlers a consumer that provides access to the {@link ComponentHandlers} collection
-     * @return this builder instance for chaining
+     * @return this brewery instance for chaining
      */
-    public DoburokuProxy<I> result(final Consumer<ComponentHandlers> handlers) {
+    public DoburokuBrewery<I> result(final Consumer<ComponentHandlers> handlers) {
         handlers.accept(this.resultHandlers);
         return this;
     }
 
     /**
-     * "Brews" the final proxy instance based on the provided configuration.
+     * "Brews" the proxy instance based on the provided configuration.
      * <p>
      * This method assembles all the configured resolvers and handlers, creates a
      * {@link Doburoku} instance to manage the translation logic, and constructs
-     * the proxy.
+     * the proxy. The result is a fully configured service proxy, ready to be used.
      *
      * @return a new proxy instance of the service interface {@code I}
      * @throws NullPointerException if a {@link TranslatableResolver} has not been set

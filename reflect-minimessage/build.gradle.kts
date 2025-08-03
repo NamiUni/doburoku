@@ -9,5 +9,7 @@ version = projectVersion
 
 dependencies {
     api(projects.doburokuReflectCore)
-    api(libs.adventure.text.minimessage)
+    compileOnlyApi(libs.adventure.text.minimessage)
+
+    testImplementation(libs.adventure.text.minimessage)
 }
