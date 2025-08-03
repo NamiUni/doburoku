@@ -12,7 +12,6 @@ dependencies {
         "reflect-api",
         "reflect-core",
         "reflect-internal",
-        "reflect-standard",
         "reflect-minimessage"
     ).forEach {
         api(project(":doburoku-$it"))

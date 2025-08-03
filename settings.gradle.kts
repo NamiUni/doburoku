@@ -20,7 +20,6 @@ sequenceOf(
     "reflect-api",
     "reflect-core",
     "reflect-internal",
-    "reflect-standard",
     "reflect-minimessage"
 ).forEach {
     include("doburoku-$it")

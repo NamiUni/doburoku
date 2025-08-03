@@ -46,8 +46,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A factory for creating a dynamic proxy of a service interface that uses the Doburoku
- * translation framework.
+ * A factory for creating a dynamic proxy of a service interface.
  * <p>
  * This class provides a builder-style interface to configure how method calls on a
  * target interface are translated into rich-text {@link Component} messages. It allows
@@ -60,7 +59,7 @@ import org.jspecify.annotations.Nullable;
 public final class DoburokuProxy<I> {
 
     private final Class<I> serviceInterface;
-    private @Nullable TranslatableResolver translatableResolver;
+    private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create();
     private final ArgumentResolversImpl argumentResolvers = new ArgumentResolversImpl();
     private @Nullable ComponentRenderer<Parameter> argumentTransformer;
     private final ComponentHandlersImpl resultHandlers = new ComponentHandlersImpl();
