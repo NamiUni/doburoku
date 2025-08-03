@@ -40,7 +40,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class DoburokuProxyTest {
+class DoburokuBreweryTest {
 
     interface SimpleService {
         TranslatableComponent welcomeMessage(String name, int level);
@@ -57,7 +57,7 @@ class DoburokuProxyTest {
         @Test
         @DisplayName("Should create a translatable component with default settings")
         void testBasic() {
-            final SimpleService service = DoburokuProxy
+            final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
                     .translatable(method -> method::getName)
                     .brew();
@@ -74,7 +74,7 @@ class DoburokuProxyTest {
         @DisplayName("Should handle default interface methods")
         void testDefaultMethod() {
             // Setup
-            final SimpleService service = DoburokuProxy
+            final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
                     .translatable(method -> method::getName)
                     .brew();
@@ -136,7 +136,7 @@ class DoburokuProxyTest {
         @DisplayName("Should use custom argument resolver for a specific type")
         void testCustom() {
             // Setup
-            final ArgumentService service = DoburokuProxy
+            final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
                     .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers.add(User.class, user -> Component.text(user.name(), NamedTextColor.GREEN)))
@@ -154,7 +154,7 @@ class DoburokuProxyTest {
         @DisplayName("Should use generic argument resolver for a specific type")
         void testGeneric() {
             // Setup
-            final ArgumentService service = DoburokuProxy
+            final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
                     .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers.add(new TypeToken<List<String>>() { }, strings -> String
@@ -174,7 +174,7 @@ class DoburokuProxyTest {
         @DisplayName("Should respect argument resolver priority")
         void testPriority() {
             // Setup
-            final ArgumentService service = DoburokuProxy
+            final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
                     .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers
@@ -194,7 +194,7 @@ class DoburokuProxyTest {
         void testTransformer() {
             // Setup
             final Style wrapperStyle = Style.style(NamedTextColor.RED);
-            final SimpleService service = DoburokuProxy
+            final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
                     .translatable(method -> method::getName)
                     .argument((component, parameter) -> Component.text().append(component).style(wrapperStyle).build())
@@ -225,7 +225,7 @@ class DoburokuProxyTest {
         @DisplayName("Should use void result handler for a component")
         void testVoid() {
             // Setup
-            final ResultService service = DoburokuProxy
+            final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
                     .translatable(method -> method::getName)
                     .result(handlers -> handlers.add(Void.class, component -> null))
@@ -242,7 +242,7 @@ class DoburokuProxyTest {
         @DisplayName("Should use generic result handler for a component")
         void testGeneric() {
             // Setup
-            final ResultService service = DoburokuProxy
+            final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
                     .translatable(method -> method::getName)
                     .result(handlers -> handlers.add(new TypeToken<Consumer<PrintStream>>() { }, component -> PrintStream::println))
@@ -259,7 +259,7 @@ class DoburokuProxyTest {
         @DisplayName("Should respect component handler priority")
         void testPriority() {
             // Setup
-            final ResultService service = DoburokuProxy
+            final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
                     .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers
