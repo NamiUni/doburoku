@@ -61,7 +61,7 @@ import org.jspecify.annotations.Nullable;
 public final class DoburokuBrewery<I> {
 
     private final Class<I> serviceInterface;
-    private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create();
+    private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create("");
     private final ArgumentResolversImpl argumentResolvers = new ArgumentResolversImpl();
     private @Nullable ComponentRenderer<Parameter> argumentTransformer;
     private final ComponentHandlersImpl resultHandlers = new ComponentHandlersImpl();

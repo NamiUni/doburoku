@@ -10,4 +10,6 @@ version = projectVersion
 dependencies {
     api(projects.doburokuReflectCore)
     compileOnlyApi(libs.adventure.text.minimessage)
+
+    testImplementation(libs.adventure.text.minimessage)
 }

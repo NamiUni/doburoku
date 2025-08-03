@@ -77,6 +77,10 @@ public final class DefaultTranslatableResolver implements TranslatableResolver {
         final StringBuilder builder = new StringBuilder();
         this.getPath(builder, method.getDeclaringClass());
 
+        if (!builder.isEmpty()) {
+            builder.append(DELIMITER);
+        }
+
         final String methodName = SEPARATE_PATTERN
                 .splitAsStream(method.getName())
                 .map(String::toLowerCase)
@@ -88,14 +92,18 @@ public final class DefaultTranslatableResolver implements TranslatableResolver {
         final Class<?> parentClass = currentClass.getDeclaringClass();
 
         if (parentClass == null) {
-            builder.append(this.prefix).append(DELIMITER);
+            if (!this.prefix.isEmpty()) {
+                builder.append(this.prefix);
+            }
         } else {
             this.getPath(builder, parentClass);
+            if (!builder.isEmpty()) {
+                builder.append(DELIMITER);
+            }
             final String formatted = SEPARATE_PATTERN
                     .splitAsStream(currentClass.getSimpleName())
                     .map(String::toLowerCase)
-                    .collect(Collectors.joining(DELIMITER))
-                    .transform(s -> s + DELIMITER);
+                    .collect(Collectors.joining(DELIMITER));
             builder.append(formatted);
         }
     }

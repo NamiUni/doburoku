@@ -59,13 +59,12 @@ class DoburokuBreweryTest {
         void testBasic() {
             final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
-                    .translatable(method -> method::getName)
                     .brew();
 
             final TranslatableComponent result = service.welcomeMessage("Test", 99);
 
             // Verify
-            assertEquals("welcomeMessage", result.key());
+            assertEquals("simple.service.welcome.message", result.key());
             assertEquals(TranslationArgument.component(Component.text("Test")), result.arguments().getFirst());
             assertEquals(TranslationArgument.component(Component.text(99)), result.arguments().getLast());
         }
@@ -76,7 +75,6 @@ class DoburokuBreweryTest {
             // Setup
             final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
-                    .translatable(method -> method::getName)
                     .brew();
 
             // Execute
@@ -138,7 +136,6 @@ class DoburokuBreweryTest {
             // Setup
             final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
-                    .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers.add(User.class, user -> Component.text(user.name(), NamedTextColor.GREEN)))
                     .brew();
 
@@ -156,7 +153,6 @@ class DoburokuBreweryTest {
             // Setup
             final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
-                    .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers.add(new TypeToken<List<String>>() { }, strings -> String
                             .join(", ", strings)
                             .transform(Component::text)))
@@ -176,7 +172,6 @@ class DoburokuBreweryTest {
             // Setup
             final ArgumentService service = DoburokuBrewery
                     .from(ArgumentService.class)
-                    .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers
                             .add(User.class, user -> Component.text("User: " + user.name()), 0)
                             .add(Admin.class, admin -> Component.text("Admin: " + admin.name()), 10))
@@ -196,7 +191,6 @@ class DoburokuBreweryTest {
             final Style wrapperStyle = Style.style(NamedTextColor.RED);
             final SimpleService service = DoburokuBrewery
                     .from(SimpleService.class)
-                    .translatable(method -> method::getName)
                     .argument((component, parameter) -> Component.text().append(component).style(wrapperStyle).build())
                     .brew();
 
@@ -227,7 +221,6 @@ class DoburokuBreweryTest {
             // Setup
             final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
-                    .translatable(method -> method::getName)
                     .result(handlers -> handlers.add(Void.class, component -> null))
                     .brew();
 
@@ -244,7 +237,6 @@ class DoburokuBreweryTest {
             // Setup
             final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
-                    .translatable(method -> method::getName)
                     .result(handlers -> handlers.add(new TypeToken<Consumer<PrintStream>>() { }, component -> PrintStream::println))
                     .brew();
 
@@ -261,7 +253,6 @@ class DoburokuBreweryTest {
             // Setup
             final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
-                    .translatable(method -> method::getName)
                     .argument(resolvers -> resolvers
                             .add(User.class, user -> Component.text("User: " + user.name()), 0)
                             .add(Admin.class, admin -> Component.text("Admin: " + admin.name()), 10))

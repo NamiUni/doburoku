@@ -32,7 +32,7 @@ class DefaultTranslatableResolverTest {
     @Test
     void testResolveLongMethodName() throws NoSuchMethodException {
 
-        final DefaultTranslatableResolver resolver = DefaultTranslatableResolver.create();
+        final DefaultTranslatableResolver resolver = DefaultTranslatableResolver.create("");
         final Method longMethod = Nest1.class.getMethod("longMethodName");
         final Translatable result = resolver.resolve(longMethod);
 
