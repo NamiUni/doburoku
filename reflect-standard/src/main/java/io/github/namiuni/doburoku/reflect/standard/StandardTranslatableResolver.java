@@ -37,7 +37,7 @@ import org.jspecify.annotations.NullMarked;
  * This resolver constructs a key by joining the formatted names of the declaring classes
  * and the method name, using a configurable delimiter and prefix. For example, a call to
  * {@code my.package.MyService.NestedService.getMessage()} could be resolved to a key like
- * {@code "my.prefix.my.service.nested.service.getMessage"}.
+ * {@code "my.prefix.my.service.nested.service.get.message"}.
  */
 @NullMarked
 public final class StandardTranslatableResolver implements TranslatableResolver {
