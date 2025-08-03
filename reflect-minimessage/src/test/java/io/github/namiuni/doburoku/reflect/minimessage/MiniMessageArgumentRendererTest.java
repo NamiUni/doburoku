@@ -30,7 +30,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.junit.jupiter.api.Test;
 
-class MiniMessagePlaceholderRendererTest {
+class MiniMessageArgumentRendererTest {
 
     interface SimpleInterface {
         void message(Object argument);
@@ -45,7 +45,7 @@ class MiniMessagePlaceholderRendererTest {
                 .get();
         final Component component = Component.text("convoy");
 
-        final MiniMessagePlaceholderRenderer transformer = MiniMessagePlaceholderRenderer.instance();
+        final MiniMessageArgumentRenderer transformer = MiniMessageArgumentRenderer.instance();
         final Component transformed = transformer.render(component, parameter);
 
         assertEquals(Argument.component("argument", Component.text("convoy")) ,transformed);
