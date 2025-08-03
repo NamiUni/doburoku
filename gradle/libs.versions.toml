@@ -1,14 +1,11 @@
-[plugins]
-indra-publishing-sonatype = { id = "net.kyori.indra.publishing.sonatype", version.ref = "indra" }
-
 [versions]
 # Tool
-shadow = "8.3.6"
 indra = "3.2.0"
 checkstyle = "10.26.0"
 jspecify = "1.0.0"
 google-auto-service = "1.1.1"
 junit = "5.13.4"
+vanniktech-maven-publish = "0.34.0"
 
 # Java
 adventure = "4.23.0"
@@ -16,6 +13,7 @@ geantyref = "2.0.1"
 
 [libraries]
 # Tool
+vanniktech-maven-publish = { group = "com.vanniktech", name = "gradle-maven-publish-plugin", version.ref = "vanniktech-maven-publish"}
 checkstyle = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyle" }
 indra-common = { group = "net.kyori", name = "indra-common", version.ref = "indra" }
 indra-licenser-spotless = { group = "net.kyori", name = "indra-licenser-spotless", version.ref = "indra" }
