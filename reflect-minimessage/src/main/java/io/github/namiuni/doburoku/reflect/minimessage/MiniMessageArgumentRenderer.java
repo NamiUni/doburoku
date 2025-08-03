@@ -32,8 +32,7 @@ import net.kyori.adventure.text.renderer.ComponentRenderer;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * A {@link ComponentRenderer} that transforms a {@link Component} into a MiniMessage
- * named placeholder.
+ * A {@link ComponentRenderer} that transforms a {@link Component} into a MiniMessage argument.
  * <p>
  * This renderer takes a resolved component and wraps it in a MiniMessage {@link Argument},
  * using the associated method parameter's name as the placeholder tag. The parameter name
@@ -43,30 +42,30 @@ import org.jspecify.annotations.NullMarked;
  * This class is a singleton and can be accessed via {@link #instance()}.
  */
 @NullMarked
-public final class MiniMessagePlaceholderRenderer implements ComponentRenderer<Parameter> {
+public final class MiniMessageArgumentRenderer implements ComponentRenderer<Parameter> {
 
-    private static final MiniMessagePlaceholderRenderer INSTANCE = new MiniMessagePlaceholderRenderer();
+    private static final MiniMessageArgumentRenderer INSTANCE = new MiniMessageArgumentRenderer();
     private static final Pattern SEPARATE_PATTERN = Pattern.compile("(?=\\p{Upper})");
 
-    private MiniMessagePlaceholderRenderer() {
+    private MiniMessageArgumentRenderer() {
     }
 
     /**
      * Gets the singleton instance of this renderer.
      *
-     * @return the {@link MiniMessagePlaceholderRenderer} instance
+     * @return the {@link MiniMessageArgumentRenderer} instance
      */
-    public static MiniMessagePlaceholderRenderer instance() {
+    public static MiniMessageArgumentRenderer instance() {
         return INSTANCE;
     }
 
     /**
-     * Renders the given component as a MiniMessage placeholder, using the context
+     * Renders the given component as a MiniMessage argument, using the context
      * parameter to determine the placeholder's name.
      *
-     * @param component the component to be wrapped in a placeholder
+     * @param component the component to be wrapped in a argument
      * @param context   the method {@link Parameter} from which the placeholder name will be derived
-     * @return a component representing a MiniMessage placeholder argument
+     * @return a component representing a MiniMessage argument
      */
     @Override
     @SuppressWarnings("PatternValidation")
