@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.reflect.messageformat;
+package io.github.namiuni.doburoku.reflect.standard;
 
 import io.github.namiuni.doburoku.reflect.api.handlers.TranslatableResolver;
 import java.lang.reflect.Method;
@@ -150,7 +150,12 @@ public final class StandardTranslatableResolver implements TranslatableResolver 
     public Translatable resolve(final Method method) {
         final StringBuilder builder = new StringBuilder();
         this.getPath(builder, method.getDeclaringClass());
-        return () -> builder.append(method.getName()).toString();
+
+        final String methodName = this.separatePattern
+                .splitAsStream(method.getName())
+                .map(String::toLowerCase)
+                .collect(Collectors.joining(String.valueOf(this.delimiter)));
+        return () -> builder.append(methodName).toString();
     }
 
     private void getPath(final StringBuilder builder, final Class<?> currentClass) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.reflect.messageformat;
+package io.github.namiuni.doburoku.reflect.standard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Method;
@@ -36,6 +36,8 @@ class StandardTranslatableResolverTest {
                 void message();
             }
         }
+
+        void longMethodName();
     }
 
     @Test
@@ -48,5 +50,15 @@ class StandardTranslatableResolverTest {
         final Translatable result = resolver.resolve(messageMethod);
 
         assertEquals("test.nest1.nest2.nest3.message", result.translationKey());
+    }
+
+    @Test
+    void testResolveLongMethodName() throws NoSuchMethodException {
+
+        final StandardTranslatableResolver resolver = StandardTranslatableResolver.create();
+        final Method longMethod = Nest1.class.getMethod("longMethodName");
+        final Translatable result = resolver.resolve(longMethod);
+
+        assertEquals("nest1.long.method.name", result.translationKey());
     }
 }
