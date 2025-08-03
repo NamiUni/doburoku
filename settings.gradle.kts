@@ -15,9 +15,6 @@ pluginManagement {
 }
 
 sequenceOf(
-    "annotations",
-    "annotation-processor",
-    "bom",
     "api",
     "reflect-api",
     "reflect-core",
