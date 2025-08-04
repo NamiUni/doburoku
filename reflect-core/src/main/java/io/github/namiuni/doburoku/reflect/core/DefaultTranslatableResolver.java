@@ -74,18 +74,20 @@ public final class DefaultTranslatableResolver implements TranslatableResolver {
      */
     @Override
     public Translatable resolve(final Method method) {
-        final StringBuilder builder = new StringBuilder();
-        this.getPath(builder, method.getDeclaringClass());
+        return () -> {
+            final StringBuilder builder = new StringBuilder();
+            this.getPath(builder, method.getDeclaringClass());
 
-        if (!builder.isEmpty()) {
-            builder.append(DELIMITER);
-        }
+            if (!builder.isEmpty()) {
+                builder.append(DELIMITER);
+            }
 
-        final String methodName = SEPARATE_PATTERN
-                .splitAsStream(method.getName())
-                .map(String::toLowerCase)
-                .collect(Collectors.joining(DELIMITER));
-        return () -> builder.append(methodName).toString();
+            final String methodName = SEPARATE_PATTERN
+                    .splitAsStream(method.getName())
+                    .map(String::toLowerCase)
+                    .collect(Collectors.joining(DELIMITER));
+            return builder.append(methodName).toString();
+        };
     }
 
     private void getPath(final StringBuilder builder, final Class<?> currentClass) {
