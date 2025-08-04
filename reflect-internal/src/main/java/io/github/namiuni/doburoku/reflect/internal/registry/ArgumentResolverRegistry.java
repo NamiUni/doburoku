@@ -42,6 +42,7 @@ import org.jspecify.annotations.Nullable;
 public final class ArgumentResolverRegistry implements ArgumentsProvider<DoburokuMethod> {
 
     private static final ArgumentResolver<Object> DEFAULT_RENDERER = value -> Component.text(String.valueOf(value));
+    private static final ArgumentResolver<ComponentLike> COMPONENT_RENDERER = value -> value;
 
     private final TypedProviderRegistry<ArgumentResolver<?>> argumentResolvers;
     private final @Nullable ComponentRenderer<Parameter> componentTransformer;
@@ -75,12 +76,19 @@ public final class ArgumentResolverRegistry implements ArgumentsProvider<Doburok
 
     private <T> ComponentLike resolve(final Parameter parameter, final T value) {
 
-        this.validate(parameter.getParameterizedType(), value);
+        final Type type = parameter.getParameterizedType();
+        this.validate(type, value);
 
         @SuppressWarnings("unchecked")
-        final ArgumentResolver<T> resolver = (ArgumentResolver<T>) Objects.requireNonNullElse(
-                this.argumentResolvers.find(parameter.getParameterizedType()),
-                ArgumentResolverRegistry.DEFAULT_RENDERER
+        final ArgumentResolver<T> resolver = (ArgumentResolver<T>) Objects.requireNonNullElseGet(
+                this.argumentResolvers.find(type),
+                () -> {
+                    if (ComponentLike.class.isAssignableFrom(value.getClass())) {
+                        return COMPONENT_RENDERER;
+                    } else {
+                        return DEFAULT_RENDERER;
+                    }
+                }
         );
 
         final ComponentLike result = resolver.resolve(value);

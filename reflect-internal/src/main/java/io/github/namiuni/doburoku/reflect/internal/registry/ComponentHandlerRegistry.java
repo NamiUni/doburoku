@@ -58,7 +58,7 @@ public final class ComponentHandlerRegistry implements ResultProvider<DoburokuMe
             return componentHandler.handle(result);
         }
 
-        if (context.method().getReturnType().isAssignableFrom(result.getClass())) {
+        if (context.method().getReturnType().isAssignableFrom(TranslatableComponent.class)) {
             return (R) result;
         }
 
