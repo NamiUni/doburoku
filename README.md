@@ -153,6 +153,9 @@ welcomeSender.accept(brewer);
 
 The advanced usage might seem a bit complex at first, but mastering it can significantly boost your development efficiency and keep your code clean. I hope this has conveyed some of its appeal\!
 
+We've also created a dedicated example plugin using Paper API and MiniPlaceholders. You can find it here, which might be helpful until the official wiki is ready:
+[https://github.com/NamiUni/doburoku-example](https://github.com/NamiUni/doburoku-example)
+
 Let's brew some doburoku\! (But in reality, brewing your own doburoku is illegal in Japan, so please don't do it\!)
 
 ## Support & Community
