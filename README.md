@@ -164,3 +164,9 @@ If you have any questions, bug reports, or feature suggestions, feel free to joi
 
 * **Support:** [Discord](https://discord.gg/X9s7q9ps33)
 * **Bug Reports & Feature Requests:** [GitHub Issues](https://github.com/NamiUni/doburoku/issues)
+
+## FAQ
+
+**Q. Uh oh, someone saw me moonshining doburoku! What do I do now?**
+
+A. Just take a deep breath, have a small drink of your doburoku, and relax.
