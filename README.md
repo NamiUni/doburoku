@@ -1,6 +1,6 @@
 # Doburoku (濁酒, 濁醪, どぶろく)
 
-A Java library to manage [Kyori/Adventure](https://github.com/KyoriPowered/adventure)'s `TranslatableComponent` in a DRY (Don't Repeat Yourself) way. 
+A Java library to manage [Kyori/Adventure](https://github.com/KyoriPowered/adventure)'s `TranslatableComponent` in a [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) way. 
 
 Inspired by [Kyori/Moonshine](https://github.com/KyoriPowered/moonshine), Doburoku is a type of Japanese moonshine.
 
