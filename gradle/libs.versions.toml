@@ -1,7 +1,7 @@
 [versions]
 # Tool
 checkstyle = "10.26.1"
-spotless = "7.2.0"
+spotless = "7.2.1"
 maven-publish = "0.34.0"
 google-auto-service = "1.1.1"
 
