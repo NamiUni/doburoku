@@ -131,12 +131,12 @@ public final class DoburokuBrewery<I> {
     }
 
     /**
-     * Configures the result handlers which process the {@link TranslatableComponent} produced by the brewery.
+     * Configures the fermenting process, which process the {@link TranslatableComponent} produced by the brewery.
      *
      * @param handlers a consumer that provides access to the {@link ComponentHandlers} collection
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> result(final Consumer<ComponentHandlers> handlers) {
+    public DoburokuBrewery<I> ferment(final Consumer<ComponentHandlers> handlers) {
         handlers.accept(this.resultHandlers);
         return this;
     }
