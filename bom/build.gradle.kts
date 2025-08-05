@@ -8,11 +8,10 @@ version = projectVersion
 
 dependencies {
     sequenceOf(
-        "api",
-        "reflect-api",
-        "reflect-core",
-        "reflect-internal",
-        "reflect-minimessage"
+        "service-common",
+        "service",
+        "service-internal",
+        "service-minimessage"
     ).forEach {
         api(project(":doburoku-$it"))
     }

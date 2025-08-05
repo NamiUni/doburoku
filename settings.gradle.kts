@@ -15,12 +15,11 @@ pluginManagement {
 }
 
 sequenceOf(
-    "api",
     "bom",
-    "reflect-api",
-    "reflect-core",
-    "reflect-internal",
-    "reflect-minimessage"
+    "service",
+    "service-common",
+    "service-internal",
+    "service-minimessage"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)
