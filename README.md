@@ -110,10 +110,6 @@ ExampleService exampleService = DoburokuBrewery
             .add(Player.class, player -> player.displayName())
     )
     .ferment(handlers -> handlers
-            .add(void.class, component -> {
-                Bukkit.getServer().broadcast(component);
-                return null;
-            })
             .add(new TypeToken<Consumer<Audience>>() { }, component -> {
                 return audience -> audience.sendMessage(component);
             })
@@ -131,18 +127,12 @@ This method customizes how method arguments are resolved into `ComponentLike` ob
 
 ### `DoburokuBrewery#ferment(Consumer<ComponentHandlers>)`
 
-This method defines how the generated `TranslatableComponent` is transformed into the method's return type. You can add `ComponentHandler`s for specific return types. If a handler for a return type is not provided, calling the method will throw an `IllegalStateException`. In this example, we've added handlers for `void` and `Consumer<Audience>` to broadcast a message and return a message consumer, respectively.
-
+This method defines how the generated `TranslatableComponent` is transformed into the method's return type. You can add `ComponentHandler`s for specific return types. If a handler for a return type is not provided, calling the method will throw an `IllegalStateException`. In this example, we've added a handler for Consumer<Audience> to return a message consumer.
 ### Final Invocation
 
 Now, you can use the `ExampleService` object as follows:
 
 ```java
-// example result: Namiu came to brew doburoku! Total 13 brewers!!
-// perform: Bukkit.getServer().broadcast(ComponentLike);
-int brewerCount = Bukkit.getOnlinePlayers().size();
-exampleService.joinMessage(brewer, brewerCount); 
-
 // example result: Welcome! Unitarou!!
 // perform: brewer.sendMessage(ComponentLike);
 Consumer<Audience> welcomeSender = exampleService.welcomeMessage(brewer);
