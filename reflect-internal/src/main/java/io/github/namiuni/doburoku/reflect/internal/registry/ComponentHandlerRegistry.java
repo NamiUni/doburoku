@@ -32,7 +32,6 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.translation.Translatable;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public final class ComponentHandlerRegistry implements ResultProvider<DoburokuMethod> {
@@ -45,7 +44,7 @@ public final class ComponentHandlerRegistry implements ResultProvider<DoburokuMe
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R> @Nullable R get(
+    public <R> R get(
             final DoburokuMethod context,
             final Translatable translatable,
             final ComponentLike[] arguments
