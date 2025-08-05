@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.reflect;
+package io.github.namiuni.doburoku.service;
 
 import io.github.namiuni.doburoku.service.common.handlers.TranslatableResolver;
 import java.lang.reflect.Method;

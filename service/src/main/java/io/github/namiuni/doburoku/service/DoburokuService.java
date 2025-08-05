@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.reflect;
+package io.github.namiuni.doburoku.service;
 
 import io.github.namiuni.doburoku.service.common.collection.ArgumentResolvers;
 import io.github.namiuni.doburoku.service.common.collection.ComponentHandlers;
@@ -58,7 +58,7 @@ import org.jspecify.annotations.Nullable;
  * @param <I> the service interface type for which a proxy will be "brewed"
  */
 @NullMarked
-public final class DoburokuBrewery<I> {
+public final class DoburokuService<I> {
 
     private final Class<I> serviceInterface;
     private @Nullable TranslatableResolver translatableResolver = DefaultTranslatableResolver.create("");
@@ -66,19 +66,19 @@ public final class DoburokuBrewery<I> {
     private @Nullable ComponentRenderer<Parameter> argumentTransformer;
     private final ComponentHandlersImpl resultHandlers = new ComponentHandlersImpl();
 
-    private DoburokuBrewery(final Class<I> serviceInterface) {
+    private DoburokuService(final Class<I> serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
     /**
-     * Creates a new {@link DoburokuBrewery} instance for the given service interface.
+     * Creates a new {@link DoburokuService} instance for the given service interface.
      *
      * @param serviceInterface the interface class to be proxied
      * @param <I>              the type of the service interface
-     * @return a new {@link DoburokuBrewery} instance
+     * @return a new {@link DoburokuService} instance
      */
-    public static <I> DoburokuBrewery<I> from(final Class<I> serviceInterface) {
-        return new DoburokuBrewery<>(serviceInterface);
+    public static <I> DoburokuService<I> from(final Class<I> serviceInterface) {
+        return new DoburokuService<>(serviceInterface);
     }
 
     /**
@@ -87,7 +87,7 @@ public final class DoburokuBrewery<I> {
      * @param resolver the {@link TranslatableResolver} to use
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> translatable(final TranslatableResolver resolver) {
+    public DoburokuService<I> translatable(final TranslatableResolver resolver) {
         this.translatableResolver = resolver;
         return this;
     }
@@ -98,7 +98,7 @@ public final class DoburokuBrewery<I> {
      * @param resolvers a consumer that provides access to the {@link ArgumentResolvers} collection
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> argument(final Consumer<ArgumentResolvers> resolvers) {
+    public DoburokuService<I> argument(final Consumer<ArgumentResolvers> resolvers) {
         this.argument(resolvers, null);
         return this;
     }
@@ -113,7 +113,7 @@ public final class DoburokuBrewery<I> {
      * @param transformer an optional {@link ComponentRenderer} to transform the resolved argument
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> argument(final Consumer<ArgumentResolvers> resolvers, final @Nullable ComponentRenderer<Parameter> transformer) {
+    public DoburokuService<I> argument(final Consumer<ArgumentResolvers> resolvers, final @Nullable ComponentRenderer<Parameter> transformer) {
         resolvers.accept(this.argumentResolvers);
         this.argumentTransformer = transformer;
         return this;
@@ -125,7 +125,7 @@ public final class DoburokuBrewery<I> {
      * @param transformer the {@link ComponentRenderer} to use for transforming arguments
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> argument(final @Nullable ComponentRenderer<Parameter> transformer) {
+    public DoburokuService<I> argument(final @Nullable ComponentRenderer<Parameter> transformer) {
         this.argumentTransformer = transformer;
         return this;
     }
@@ -136,7 +136,7 @@ public final class DoburokuBrewery<I> {
      * @param handlers a consumer that provides access to the {@link ComponentHandlers} collection
      * @return this brewery instance for chaining
      */
-    public DoburokuBrewery<I> result(final Consumer<ComponentHandlers> handlers) {
+    public DoburokuService<I> result(final Consumer<ComponentHandlers> handlers) {
         handlers.accept(this.resultHandlers);
         return this;
     }
@@ -151,7 +151,7 @@ public final class DoburokuBrewery<I> {
         Objects.requireNonNull(this.translatableResolver);
 
         final TypedProviderRegistry<ArgumentResolver<?>> argumentProvider = new TypedProviderRegistry<>(this.argumentResolvers.get(), value -> Component.empty());
-        final TypedProviderRegistry<ComponentHandler<?>> resultProvider = new TypedProviderRegistry<>(this.resultHandlers.get(), component -> null);
+        @SuppressWarnings("DataFlowIssue") final TypedProviderRegistry<ComponentHandler<?>> resultProvider = new TypedProviderRegistry<>(this.resultHandlers.get(), component -> null);
 
         final DoburokuDrunkard<DoburokuMethod> doburokuDrunkard = DoburokuDrunkard.brew(
                 new TranslatableResolverRegistry(this.translatableResolver),

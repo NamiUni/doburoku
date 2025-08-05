@@ -20,12 +20,6 @@ spotless {
     }
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
 tasks.compileJava {
     options.compilerArgs.add("-parameters")
     options.compilerArgs.add("-Xlint:-processing")
