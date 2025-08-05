@@ -25,7 +25,6 @@ package io.github.namiuni.doburoku.service.common.handlers;
 
 import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /**
  * A functional interface that handles a {@link TranslatableComponent} and transforms it
@@ -43,5 +42,5 @@ public interface ComponentHandler<R> {
      * @param component the component to handle
      * @return the result of the handling, which may be {@code null}
      */
-    @Nullable R handle(TranslatableComponent component);
+    R handle(TranslatableComponent component);
 }
