@@ -221,7 +221,7 @@ class DoburokuBreweryTest {
             // Setup
             final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
-                    .ferment(handlers -> handlers.add(Void.class, component -> null))
+                    .result(handlers -> handlers.add(Void.class, component -> null))
                     .brew();
 
             // Execute
@@ -237,7 +237,7 @@ class DoburokuBreweryTest {
             // Setup
             final ResultService service = DoburokuBrewery
                     .from(ResultService.class)
-                    .ferment(handlers -> handlers.add(new TypeToken<Consumer<PrintStream>>() { }, component -> PrintStream::println))
+                    .result(handlers -> handlers.add(new TypeToken<Consumer<PrintStream>>() { }, component -> PrintStream::println))
                     .brew();
 
             // Execute
@@ -256,7 +256,7 @@ class DoburokuBreweryTest {
                     .argument(resolvers -> resolvers
                             .add(User.class, user -> Component.text("User: " + user.name()), 0)
                             .add(Admin.class, admin -> Component.text("Admin: " + admin.name()), 10))
-                    .ferment(handlers -> handlers
+                    .result(handlers -> handlers
                             .add(User.class, component -> new User("Alice"), 0)
                             .add(Admin.class, component -> new Admin("Bob"), 10))
                     .brew();
