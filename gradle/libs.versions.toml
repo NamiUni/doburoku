@@ -8,7 +8,7 @@ google-auto-service = "1.1.1"
 # Java
 jspecify = "1.0.0"
 geantyref = "2.0.1"
-adventure = "4.23.0"
+adventure = "4.24.0"
 
 # Test
 junit = "5.13.4"
