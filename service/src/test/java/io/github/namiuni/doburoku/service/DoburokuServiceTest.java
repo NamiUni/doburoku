@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.reflect;
+package io.github.namiuni.doburoku.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class DoburokuBreweryTest {
+class DoburokuServiceTest {
 
     interface SimpleService {
         TranslatableComponent welcomeMessage(String name, int level);
@@ -57,7 +57,7 @@ class DoburokuBreweryTest {
         @Test
         @DisplayName("Should create a translatable component with default settings")
         void testBasic() {
-            final SimpleService service = DoburokuBrewery
+            final SimpleService service = DoburokuService
                     .from(SimpleService.class)
                     .brew();
 
@@ -73,7 +73,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should handle default interface methods")
         void testDefaultMethod() {
             // Setup
-            final SimpleService service = DoburokuBrewery
+            final SimpleService service = DoburokuService
                     .from(SimpleService.class)
                     .brew();
 
@@ -134,7 +134,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should use custom argument resolver for a specific type")
         void testCustom() {
             // Setup
-            final ArgumentService service = DoburokuBrewery
+            final ArgumentService service = DoburokuService
                     .from(ArgumentService.class)
                     .argument(resolvers -> resolvers.add(User.class, user -> Component.text(user.name(), NamedTextColor.GREEN)))
                     .brew();
@@ -151,7 +151,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should use generic argument resolver for a specific type")
         void testGeneric() {
             // Setup
-            final ArgumentService service = DoburokuBrewery
+            final ArgumentService service = DoburokuService
                     .from(ArgumentService.class)
                     .argument(resolvers -> resolvers.add(new TypeToken<List<String>>() { }, strings -> String
                             .join(", ", strings)
@@ -170,7 +170,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should respect argument resolver priority")
         void testPriority() {
             // Setup
-            final ArgumentService service = DoburokuBrewery
+            final ArgumentService service = DoburokuService
                     .from(ArgumentService.class)
                     .argument(resolvers -> resolvers
                             .add(User.class, user -> Component.text("User: " + user.name()), 0)
@@ -189,7 +189,7 @@ class DoburokuBreweryTest {
         void testTransformer() {
             // Setup
             final Style wrapperStyle = Style.style(NamedTextColor.RED);
-            final SimpleService service = DoburokuBrewery
+            final SimpleService service = DoburokuService
                     .from(SimpleService.class)
                     .argument((component, parameter) -> Component.text().append(component).style(wrapperStyle).build())
                     .brew();
@@ -219,7 +219,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should use void result handler for a component")
         void testVoid() {
             // Setup
-            final ResultService service = DoburokuBrewery
+            final ResultService service = DoburokuService
                     .from(ResultService.class)
                     .result(handlers -> handlers.add(Void.class, component -> null))
                     .brew();
@@ -235,7 +235,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should use generic result handler for a component")
         void testGeneric() {
             // Setup
-            final ResultService service = DoburokuBrewery
+            final ResultService service = DoburokuService
                     .from(ResultService.class)
                     .result(handlers -> handlers.add(new TypeToken<Consumer<PrintStream>>() { }, component -> PrintStream::println))
                     .brew();
@@ -251,7 +251,7 @@ class DoburokuBreweryTest {
         @DisplayName("Should respect component handler priority")
         void testPriority() {
             // Setup
-            final ResultService service = DoburokuBrewery
+            final ResultService service = DoburokuService
                     .from(ResultService.class)
                     .argument(resolvers -> resolvers
                             .add(User.class, user -> Component.text("User: " + user.name()), 0)
