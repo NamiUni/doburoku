@@ -103,7 +103,7 @@ public interface ExampleService {
 Now, let's brew the proxy with a more advanced configuration:
 
 ```java
-ExampleService exampleService = DoburokuBrewery
+ExampleService exampleService = DoburokuService
     .from(ExampleService.class)
     .translatable(DefaultTranslatableResolver.create("example"))
     .argument(resolvers -> resolvers
