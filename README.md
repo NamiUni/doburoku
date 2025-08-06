@@ -1,4 +1,4 @@
-# Doburoku (濁酒, 濁醪, どぶろく)
+# Doburoku (濁酒, 濁醪, どぶろく) WIP
 
 A Java library to manage [Kyori/Adventure](https://github.com/KyoriPowered/adventure)'s `TranslatableComponent` in a [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) way. 
 
