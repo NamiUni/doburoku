@@ -109,7 +109,7 @@ ExampleService exampleService = DoburokuBrewery
     .argument(resolvers -> resolvers
             .add(Player.class, player -> player.displayName())
     )
-    .ferment(handlers -> handlers
+    .result(handlers -> handlers
             .add(new TypeToken<Consumer<Audience>>() { }, component -> {
                 return audience -> audience.sendMessage(component);
             })
@@ -125,7 +125,7 @@ This method configures how the translation key for a `TranslatableComponent` is 
 
 This method customizes how method arguments are resolved into `ComponentLike` objects for the `TranslatableComponent`'s arguments. You can add `ArgumentResolver`s for specific types. For types that are already `ComponentLike`, no resolver is needed. For other types, the library defaults to `String.valueOf()` and then wraps it in `Component.text()`. Here, we add a resolver to handle `Player` objects by converting them to their display name.
 
-### `DoburokuBrewery#ferment(Consumer<ComponentHandlers>)`
+### `DoburokuBrewery#result(Consumer<ComponentHandlers>)`
 
 This method defines how the generated `TranslatableComponent` is transformed into the method's return type. You can add `ComponentHandler`s for specific return types. If a handler for a return type is not provided, calling the method will throw an `IllegalStateException`. In this example, we've added a handler for Consumer<Audience> to return a message consumer.
 ### Final Invocation
