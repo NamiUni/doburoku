@@ -16,10 +16,9 @@ pluginManagement {
 
 sequenceOf(
     "bom",
-    "service",
-    "service-common",
-    "service-internal",
-    "service-minimessage"
+    "common",
+    "core",
+    "standard"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)
