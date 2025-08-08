@@ -61,7 +61,12 @@ public final class ArgumentResolverRegistry implements TranslationArgumentResolv
         this.argumentTransformer = null;
     }
 
-    private ArgumentResolverRegistry(final TranslationArgumentTransformer transformer) {
+    /**
+     * Creates a registry with the given transformer.
+     *
+     * @param transformer the transformer to use, or {@code null} for default behavior
+     */
+    public ArgumentResolverRegistry(final TranslationArgumentTransformer transformer) {
         this.argumentTransformer = transformer;
     }
 
