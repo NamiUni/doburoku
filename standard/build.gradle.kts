@@ -12,4 +12,6 @@ dependencies {
     api(libs.geantyref)
 
     compileOnlyApi(libs.adventure.text.minimessage)
+
+    testImplementation(libs.adventure.text.minimessage)
 }

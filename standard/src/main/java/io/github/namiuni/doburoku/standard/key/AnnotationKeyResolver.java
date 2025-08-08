@@ -26,17 +26,42 @@ package io.github.namiuni.doburoku.standard.key;
 import io.github.namiuni.doburoku.common.DoburokuMethod;
 import io.github.namiuni.doburoku.common.key.TranslationKeyResolver;
 import io.github.namiuni.doburoku.standard.annotation.Key;
-import java.util.HashMap;
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Resolves translation keys from the {@link Key} annotation on target methods.
+ * <p>
+ * Resolved keys are cached per reflective {@link Method} to avoid repeated lookups.
+ * This implementation is thread-safe.
+ * </p>
+ */
 @NullMarked
 public final class AnnotationKeyResolver implements TranslationKeyResolver {
 
-    private final Map<DoburokuMethod, String> cache = new HashMap<>();
+    private final Map<Method, String> cache = new ConcurrentHashMap<>();
 
+    /**
+     * Resolves the translation key by reading the {@link Key} annotation on the
+     * method represented by the provided context, caching the result.
+     *
+     * @param context the method invocation context
+     * @return the translation key declared on the method
+     * @throws IllegalStateException if the method is not annotated with {@link Key}
+     */
     @Override
     public String resolve(final DoburokuMethod context) {
-        return this.cache.computeIfAbsent(context, it -> it.method().getAnnotation(Key.class).value());
+        final Method method = context.method();
+        return this.cache.computeIfAbsent(method, this::extractKey);
+    }
+
+    private String extractKey(final Method method) {
+        final Key annotation = method.getAnnotation(Key.class);
+        if (annotation == null) {
+            throw new IllegalStateException("Missing @Key on method: " + method);
+        }
+        return annotation.value();
     }
 }
