@@ -26,8 +26,20 @@ package io.github.namiuni.doburoku.standard.argument;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Strategy interface that converts a typed argument into a {@link ComponentLike}
+ * representation to be used as a translation argument.
+ *
+ * @param <T> the argument type supported by this renderer
+ */
 @NullMarked
 public interface TranslationArgumentRenderer<T> {
 
+    /**
+     * Renders the given argument into a {@link ComponentLike}.
+     *
+     * @param argument the source value to render
+     * @return the rendered component
+     */
     ComponentLike render(T argument);
 }

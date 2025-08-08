@@ -36,7 +36,7 @@ final class DoburokuDrunkard {
     private final TranslationArgumentResolver argumentResolver;
     private final TranslationResultResolver resultResolver;
 
-    public DoburokuDrunkard(
+    DoburokuDrunkard(
             final TranslationKeyResolver keyResolver,
             final TranslationArgumentResolver argumentResolver,
             final TranslationResultResolver resultResolver

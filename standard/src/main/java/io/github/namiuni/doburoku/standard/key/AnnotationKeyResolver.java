@@ -23,9 +23,9 @@
  */
 package io.github.namiuni.doburoku.standard.key;
 
-import io.github.namiuni.doburoku.standard.annotation.Key;
 import io.github.namiuni.doburoku.common.DoburokuMethod;
 import io.github.namiuni.doburoku.common.key.TranslationKeyResolver;
+import io.github.namiuni.doburoku.standard.annotation.Key;
 import java.util.HashMap;
 import java.util.Map;
 import org.jspecify.annotations.NullMarked;

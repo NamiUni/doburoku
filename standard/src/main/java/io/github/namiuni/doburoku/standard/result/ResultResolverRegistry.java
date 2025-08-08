@@ -36,11 +36,30 @@ import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Default implementation of {@link TranslationResultResolver} that creates a
+ * {@link TranslatableComponent} from a key and arguments, then adapts it via
+ * a registered {@link TranslatableComponentTransformer} based on the method's return type.
+ * <p>
+ * Note: this class is not thread-safe.
+ * </p>
+ */
 @NullMarked
 public final class ResultResolverRegistry implements TranslationResultResolver {
 
     private final Map<Type, TranslatableComponentTransformer<?>> transformers = new HashMap<>();
 
+    /**
+     * Resolves a result for the given invocation by building a {@link TranslatableComponent}
+     * and transforming it to the declared return type when a matching transformer exists.
+     *
+     * @param context the invocation context
+     * @param key the translation key
+     * @param arguments the rendered translation arguments
+     * @param <R> the method's return type
+     * @return the resolved result
+     * @throws IllegalStateException if no transformer exists and the method does not return {@link TranslatableComponent}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <R> R resolve(
@@ -64,11 +83,27 @@ public final class ResultResolverRegistry implements TranslationResultResolver {
         throw new IllegalStateException("No result handler found for return type: %s".formatted(type));
     }
 
+    /**
+     * Registers a transformer for a raw return type.
+     *
+     * @param <T> the result type
+     * @param type the raw class to associate with the transformer
+     * @param transformer the transformer to register
+     * @return the previous transformer for the type, or {@code null} if none
+     */
     @SuppressWarnings("unchecked")
     public <T> @Nullable TranslatableComponentTransformer<T> put(final Class<T> type, final TranslatableComponentTransformer<T> transformer) {
         return (TranslatableComponentTransformer<T>) this.transformers.put(type, transformer);
     }
 
+    /**
+     * Registers a transformer for a generic return type.
+     *
+     * @param <T> the result type
+     * @param type the generic type token
+     * @param transformer the transformer to register
+     * @return the previous transformer for the type, or {@code null} if none
+     */
     @SuppressWarnings("unchecked")
     public <T> @Nullable TranslatableComponentTransformer<T> put(final TypeToken<T> type, final TranslatableComponentTransformer<T> transformer) {
         return (TranslatableComponentTransformer<T>) this.transformers.put(type.getType(), transformer);

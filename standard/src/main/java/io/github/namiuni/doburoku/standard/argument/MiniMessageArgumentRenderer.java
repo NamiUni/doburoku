@@ -33,6 +33,13 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * A {@link TranslationArgumentTransformer} that converts rendered arguments into
+ * MiniMessage named arguments using a resolved placeholder name.
+ * <p>The placeholder name is derived from {@link Name} if present; otherwise the
+ * parameter's camelCase name is converted to snake_case.</p>
+ * <p>This implementation is stateless aside from a simple cache and is provided as a singleton.</p>
+ */
 @NullMarked
 public final class MiniMessageArgumentRenderer implements TranslationArgumentTransformer {
 
@@ -46,10 +53,23 @@ public final class MiniMessageArgumentRenderer implements TranslationArgumentTra
     private MiniMessageArgumentRenderer() {
     }
 
+    /**
+     * Returns the singleton instance of this transformer.
+     *
+     * @return the shared {@code MiniMessageArgumentRenderer} instance
+     */
     public static MiniMessageArgumentRenderer instance() {
         return INSTANCE;
     }
 
+    /**
+     * Wraps the supplied component into a MiniMessage {@link Argument} with the resolved
+     * parameter name.
+     *
+     * @param parameter the reflective parameter for which the argument was rendered
+     * @param argument  the component representing the argument value
+     * @return a MiniMessage named argument component
+     */
     @Override
     @SuppressWarnings("PatternValidation")
     public ComponentLike transform(final Parameter parameter, final ComponentLike argument) {

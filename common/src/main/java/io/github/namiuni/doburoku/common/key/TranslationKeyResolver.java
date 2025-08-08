@@ -26,9 +26,22 @@ package io.github.namiuni.doburoku.common.key;
 import io.github.namiuni.doburoku.common.DoburokuMethod;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Resolves a translation key for a given reflective method invocation.
+ * <p>
+ * Implementations may rely on naming conventions, annotations, or other
+ * context-dependent strategies.
+ * </p>
+ */
 @NullMarked
 @FunctionalInterface
 public interface TranslationKeyResolver {
 
+    /**
+     * Resolves the translation key for the provided invocation context.
+     *
+     * @param context the method invocation context
+     * @return the translation key to be used for the invocation
+     */
     String resolve(DoburokuMethod context);
 }

@@ -54,25 +54,56 @@ public final class DoburokuService<I> {
         this.serviceInterface = serviceInterface;
     }
 
+    /**
+     * Creates a new builder for the given service interface.
+     *
+     * @param <I> the service interface type
+     * @param serviceInterface the interface class to proxy
+     * @return a new {@code DoburokuService} instance
+     */
     public static <I> DoburokuService<I> from(final Class<I> serviceInterface) {
         return new DoburokuService<>(serviceInterface);
     }
 
+    /**
+     * Sets the resolver used to determine translation keys for method invocations.
+     *
+     * @param keyResolver the key resolver
+     * @return this instance for chaining
+     */
     public DoburokuService<I> key(final TranslationKeyResolver keyResolver) {
         this.translatableKeyResolver = keyResolver;
         return this;
     }
 
+    /**
+     * Sets the resolver that renders method arguments into translation components.
+     *
+     * @param argumentResolver the argument resolver
+     * @return this instance for chaining
+     */
     public DoburokuService<I> argument(final TranslationArgumentResolver argumentResolver) {
         this.translationArgumentRenderers = argumentResolver;
         return this;
     }
 
+    /**
+     * Sets the resolver that produces the final translation result.
+     *
+     * @param resultResolver the result resolver
+     * @return this instance for chaining
+     */
     public DoburokuService<I> result(final TranslationResultResolver resultResolver) {
         this.componentHandlers = resultResolver;
         return this;
     }
 
+    /**
+     * Builds and returns a dynamic proxy that implements the configured service interface.
+     *
+     * @return a proxy implementing the service interface
+     * @throws NullPointerException if any required resolver has not been configured
+     */
     public I brew() {
         Objects.requireNonNull(this.translatableKeyResolver);
         Objects.requireNonNull(this.translationArgumentRenderers);

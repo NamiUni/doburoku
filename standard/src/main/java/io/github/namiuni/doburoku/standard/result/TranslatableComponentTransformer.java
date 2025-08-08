@@ -27,8 +27,20 @@ import java.lang.reflect.Method;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Transforms a {@link TranslatableComponent} into an implementation-defined result type.
+ *
+ * @param <R> the result type produced by the transformer
+ */
 @NullMarked
 public interface TranslatableComponentTransformer<R> {
 
+    /**
+     * Handles the given translatable component to produce a result.
+     *
+     * @param method the method for which the component was created
+     * @param component the translatable component assembled for the invocation
+     * @return the transformed result
+     */
     R handle(Method method, TranslatableComponent component);
 }

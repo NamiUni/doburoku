@@ -27,9 +27,22 @@ import io.github.namiuni.doburoku.common.DoburokuMethod;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Resolves a translation result given a key and a set of rendered arguments.
+ * <p>The result type is implementation-defined.</p>
+ */
 @NullMarked
 @FunctionalInterface
 public interface TranslationResultResolver {
 
+    /**
+     * Produces a translation result for the given key and arguments.
+     *
+     * @param context the invocation context
+     * @param key the translation key to resolve
+     * @param arguments the rendered arguments referenced by the key
+     * @param <R> the result type
+     * @return the resolved result
+     */
     <R> R resolve(DoburokuMethod context, String key, ComponentLike[] arguments);
 }

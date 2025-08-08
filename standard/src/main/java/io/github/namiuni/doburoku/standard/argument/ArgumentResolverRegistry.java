@@ -36,6 +36,15 @@ import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Default implementation of {@link TranslationArgumentResolver} that renders method
+ * arguments to {@link ComponentLike} instances using a registry of type-specific renderers
+ * and an optional {@link TranslationArgumentTransformer}.
+ *
+ * <p>By default, {@link ComponentLike} values are passed through as-is, while other values
+ * are converted via {@code Component.text(String.valueOf(value))}.</p>
+ * <p>Note: this class is not thread-safe.</p>
+ */
 @NullMarked
 public final class ArgumentResolverRegistry implements TranslationArgumentResolver {
 
@@ -45,6 +54,9 @@ public final class ArgumentResolverRegistry implements TranslationArgumentResolv
     private final Map<Type, TranslationArgumentRenderer<?>> argumentRenderers = new HashMap<>();
     private final @Nullable TranslationArgumentTransformer argumentTransformer;
 
+    /**
+     * Creates a registry with default behavior and no transformer.
+     */
     public ArgumentResolverRegistry() {
         this.argumentTransformer = null;
     }
@@ -53,6 +65,12 @@ public final class ArgumentResolverRegistry implements TranslationArgumentResolv
         this.argumentTransformer = transformer;
     }
 
+    /**
+     * Renders all arguments from the provided method context.
+     *
+     * @param context the method invocation context
+     * @return an array of components aligned with the method's parameter order
+     */
     @Override
     public ComponentLike[] resolve(final DoburokuMethod context) {
         final DoburokuMethod.Argument<?>[] arguments = context.arguments();
@@ -94,11 +112,27 @@ public final class ArgumentResolverRegistry implements TranslationArgumentResolv
         }
     }
 
+    /**
+     * Registers a renderer for the given raw type.
+     *
+     * @param <T>      the type to render
+     * @param type     the raw class to associate with the renderer
+     * @param renderer the renderer implementation
+     * @return the previous renderer for the type, or {@code null} if none
+     */
     @SuppressWarnings("unchecked")
     public <T> @Nullable TranslationArgumentRenderer<T> put(final Class<T> type, final TranslationArgumentRenderer<T> renderer) {
         return (TranslationArgumentRenderer<T>) this.argumentRenderers.put(type, renderer);
     }
 
+    /**
+     * Registers a renderer for the given generic type.
+     *
+     * @param <T>      the type to render
+     * @param type     the generic type token
+     * @param renderer the renderer implementation
+     * @return the previous renderer for the type, or {@code null} if none
+     */
     @SuppressWarnings("unchecked")
     public <T> @Nullable TranslationArgumentRenderer<T> put(final TypeToken<T> type, final TranslationArgumentRenderer<T> renderer) {
         return (TranslationArgumentRenderer<T>) this.argumentRenderers.put(type.getType(), renderer);

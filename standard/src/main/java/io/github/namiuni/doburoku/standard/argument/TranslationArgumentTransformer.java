@@ -27,8 +27,21 @@ import java.lang.reflect.Parameter;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Post-processor for rendered translation arguments.
+ *
+ * <p>Implementations may wrap or adjust the component based on the reflective
+ * {@link Parameter} metadata.</p>
+ */
 @NullMarked
 public interface TranslationArgumentTransformer {
 
+    /**
+     * Transforms a rendered argument component, optionally using parameter metadata.
+     *
+     * @param parameter the reflective parameter to which the argument belongs
+     * @param argument  the already-rendered component for the argument
+     * @return the transformed component
+     */
     ComponentLike transform(Parameter parameter, ComponentLike argument);
 }

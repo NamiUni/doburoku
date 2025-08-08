@@ -27,9 +27,19 @@ import io.github.namiuni.doburoku.common.DoburokuMethod;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Resolves the arguments of a method invocation into an ordered array of
+ * {@link ComponentLike} values suitable for translation.
+ */
 @NullMarked
 @FunctionalInterface
 public interface TranslationArgumentResolver {
 
-    <T> ComponentLike[] resolve(DoburokuMethod context);
+    /**
+     * Resolves all arguments for the given method invocation context.
+     *
+     * @param context the invocation context providing access to arguments
+     * @return an array of rendered argument components
+     */
+    ComponentLike[] resolve(DoburokuMethod context);
 }

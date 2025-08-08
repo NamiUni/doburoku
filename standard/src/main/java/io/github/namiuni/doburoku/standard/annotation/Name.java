@@ -27,9 +27,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Declares an explicit, stable name for a method parameter when rendering translation
+ * arguments.
+ *
+ * <p>The declared name takes precedence over any derived naming strategy.</p>
+ * <p>This annotation is retained at runtime for reflective access.</p>
+ */
 @NullMarked
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Name {
 
+    /**
+     * The explicit name to associate with the annotated parameter.
+     *
+     * @return the name to use during translation rendering
+     */
     String value();
 }

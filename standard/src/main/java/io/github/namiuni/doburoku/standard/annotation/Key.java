@@ -27,9 +27,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Declares an explicit translation key associated with a method or element.
+ *
+ * <p>This key may override a convention-based key resolution.</p>
+ * <p>The annotation is retained at runtime to support reflective resolution.</p>
+ */
 @NullMarked
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Key {
 
+    /**
+     * The translation key to associate with the annotated element.
+     *
+     * @return the translation key
+     */
     String value();
 }
