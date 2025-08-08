@@ -29,14 +29,43 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Represents a captured method invocation within Doburoku's proxy pipeline.
+ * <p>
+ * This record bundles the proxy instance, the reflected method, and its arguments
+ * (paired with their {@link java.lang.reflect.Parameter} metadata) for downstream processing.
+ *
+ * @param proxy     the proxy instance on which the method was invoked
+ * @param method    the reflected method being invoked
+ * @param arguments the arguments of the invocation, each coupled with its {@link Parameter}
+ */
 @NullMarked
 @ApiStatus.Internal
 public record DoburokuMethod(Object proxy, Method method, Argument<?>[] arguments) {
 
+    /**
+     * Represents a single method argument along with its reflective parameter metadata.
+     *
+     * @param <T>       the compile-time type of the argument value
+     * @param parameter the formal {@link Parameter} corresponding to this argument
+     * @param value     the actual argument value; may be {@code null}
+     */
     @ApiStatus.Internal
     public record Argument<T>(Parameter parameter, @Nullable T value) {
     }
 
+    /**
+     * Creates a {@link DoburokuMethod} from the given proxy, method, and raw argument values.
+     * <p>
+     * The provided {@code args} are paired with the corresponding {@link Parameter}s
+     * obtained from {@link Method#getParameters()}. The array is expected to have the same
+     * length as the method's parameter list; individual values may be {@code null}.
+     *
+     * @param proxy  the proxy instance on which the invocation occurs
+     * @param method the reflected method being invoked
+     * @param args   the raw argument values corresponding to the method parameters; values may be {@code null}
+     * @return a new {@code DoburokuMethod} encapsulating the invocation data
+     */
     @ApiStatus.Internal
     public static DoburokuMethod of(final Object proxy, final Method method, final @Nullable Object[] args) {
         final Parameter[] parameters = method.getParameters();
