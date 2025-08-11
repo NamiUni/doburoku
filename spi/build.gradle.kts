@@ -8,6 +8,7 @@ version = projectVersion
 
 dependencies {
     api(projects.doburokuApi)
+    api(projects.doburokuAnnotation)
     api(libs.geantyref)
     compileOnlyApi(libs.adventure.api)
 }

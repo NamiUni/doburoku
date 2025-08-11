@@ -23,7 +23,7 @@
  */
 package io.github.namiuni.doburoku.standard.argument;
 
-import io.github.namiuni.doburoku.spi.annotation.Name;
+import io.github.namiuni.doburoku.annotation.annotations.Name;
 import io.github.namiuni.doburoku.spi.argument.TranslationArgumentTransformer;
 import java.lang.reflect.Parameter;
 import java.util.Map;

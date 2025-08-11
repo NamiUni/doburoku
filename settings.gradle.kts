@@ -15,6 +15,8 @@ pluginManagement {
 }
 
 sequenceOf(
+    "annotation",
+    "annotation-processor",
     "api",
     "bom",
     "internal",

@@ -21,25 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.spi.annotation;
+package io.github.namiuni.doburoku.annotation.annotations;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Marks an element with an explicit translation key.
+ * Declares that the annotated type defines a resource bundle used for message resolution.
  *
- * <p>The declared key takes precedence over any convention-based resolution.</p>
+ * <p>The base name follows the standard {@code java.util.ResourceBundle} naming convention.</p>
  */
 @NullMarked
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Key {
+@Target(ElementType.TYPE)
+public @interface ResourceBundle {
 
     /**
-     * The translation key to associate with the annotated element.
+     * The base name of the resource bundle.
      *
-     * @return the translation key
+     * @return base name used to locate bundle resources
      */
-    String value();
+    String baseName();
 }

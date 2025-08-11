@@ -23,9 +23,9 @@
  */
 package io.github.namiuni.doburoku.internal.key;
 
+import io.github.namiuni.doburoku.annotation.annotations.Key;
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
 import io.github.namiuni.doburoku.api.key.TranslationKeyResolver;
-import io.github.namiuni.doburoku.spi.annotation.Key;
 import io.github.namiuni.doburoku.spi.exception.MissingTranslationKeyException;
 import java.lang.reflect.Method;
 import java.util.Map;

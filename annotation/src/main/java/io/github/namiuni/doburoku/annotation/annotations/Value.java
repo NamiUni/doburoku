@@ -21,25 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.spi.annotation;
+package io.github.namiuni.doburoku.annotation.annotations;
 
+import io.github.namiuni.doburoku.annotation.Locales;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Marks a parameter with a stable, explicit argument name used for translation rendering.
+ * Declares a localized message value for a method.
  *
- * <p>The declared name overrides any derived naming strategy.</p>
+ * <p>This annotation is repeatable via {@link Values}.</p>
  */
 @NullMarked
+@Documented
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Name {
+@Repeatable(Values.class)
+public @interface Value {
 
     /**
-     * The explicit name to associate with the annotated parameter.
+     * Target locale of this value.
      *
-     * @return the name to use during translation rendering
+     * @return the locale
      */
-    String value();
+    Locales locale() default Locales.ROOT;
+
+    /**
+     * The message content for the locale.
+     *
+     * @return the message text
+     */
+    String content();
 }
