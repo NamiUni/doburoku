@@ -18,7 +18,8 @@ sequenceOf(
     "api",
     "bom",
     "internal",
-    "runtime"
+    "spi",
+    "standard"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)

@@ -10,7 +10,8 @@ dependencies {
     sequenceOf(
         "api",
         "internal",
-        "runtime"
+        "spi",
+        "standard"
     ).forEach {
         api(project(":doburoku-$it"))
     }

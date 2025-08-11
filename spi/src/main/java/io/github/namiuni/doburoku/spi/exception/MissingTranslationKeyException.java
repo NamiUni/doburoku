@@ -21,27 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.api.key;
+package io.github.namiuni.doburoku.spi.exception;
 
-import io.github.namiuni.doburoku.api.invocation.InvocationContext;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Resolves a translation key for a given reflective method invocation.
- * <p>
- * Implementations may rely on naming conventions, annotations, or other
- * context-dependent strategies.
- * </p>
+ * Indicates that a translation key could not be resolved for a target method.
+ * Unchecked exception indicating that a translation key could not be resolved during a translation
+ * method invocation.
+ *
+ * <p>This is typically thrown when no translation mapping exists for the requested key or when
+ * the key cannot be derived for the invoked method.</p>
  */
 @NullMarked
-@FunctionalInterface
-public interface TranslationKeyResolver {
+public final class MissingTranslationKeyException extends RuntimeException {
+    
+    /**
+     * Creates a new exception with the specified error message.
+     *
+     * @param message the detail message explaining why the key could not be resolved
+     */
+    public MissingTranslationKeyException(final String message) {
+        super(message);
+    }
 
     /**
-     * Resolves the translation key for the provided invocation context.
+     * Creates a new exception with the specified error message and underlying cause.
      *
-     * @param context the method invocation context
-     * @return the translation key to be used for the invocation
+     * @param message the detail message explaining why the key could not be resolved
+     * @param cause the underlying cause of this exception
      */
-    String resolve(InvocationContext context);
+    public MissingTranslationKeyException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

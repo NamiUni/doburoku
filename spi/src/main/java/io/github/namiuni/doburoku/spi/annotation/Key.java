@@ -21,27 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.api.key;
+package io.github.namiuni.doburoku.spi.annotation;
 
-import io.github.namiuni.doburoku.api.invocation.InvocationContext;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Resolves a translation key for a given reflective method invocation.
- * <p>
- * Implementations may rely on naming conventions, annotations, or other
- * context-dependent strategies.
- * </p>
+ * Marks an element with an explicit translation key.
+ *
+ * <p>The declared key takes precedence over any convention-based resolution.</p>
  */
 @NullMarked
-@FunctionalInterface
-public interface TranslationKeyResolver {
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Key {
 
     /**
-     * Resolves the translation key for the provided invocation context.
+     * The translation key to associate with the annotated element.
      *
-     * @param context the method invocation context
-     * @return the translation key to be used for the invocation
+     * @return the translation key
      */
-    String resolve(InvocationContext context);
+    String value();
 }

@@ -8,5 +8,4 @@ version = projectVersion
 
 dependencies {
     compileOnlyApi(libs.adventure.api)
-    api(libs.geantyref)
 }

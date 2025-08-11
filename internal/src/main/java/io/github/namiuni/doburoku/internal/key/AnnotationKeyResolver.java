@@ -23,10 +23,10 @@
  */
 package io.github.namiuni.doburoku.internal.key;
 
-import io.github.namiuni.doburoku.api.annotation.Key;
-import io.github.namiuni.doburoku.api.exception.MissingTranslationKeyException;
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
 import io.github.namiuni.doburoku.api.key.TranslationKeyResolver;
+import io.github.namiuni.doburoku.spi.annotation.Key;
+import io.github.namiuni.doburoku.spi.exception.MissingTranslationKeyException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

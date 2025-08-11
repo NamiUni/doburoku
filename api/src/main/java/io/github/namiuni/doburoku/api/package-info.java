@@ -1,6 +1,4 @@
 /**
- * Foundational SPI and shared types for Doburoku.
- *
- * <p>This module defines stable interfaces and utilities used by higher-level modules.</p>
+ * Stable API and shared contracts for Doburoku.
  */
 package io.github.namiuni.doburoku.api;

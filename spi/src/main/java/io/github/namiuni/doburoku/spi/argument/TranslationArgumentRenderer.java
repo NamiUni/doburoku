@@ -21,27 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.api.key;
+package io.github.namiuni.doburoku.spi.argument;
 
-import io.github.namiuni.doburoku.api.invocation.InvocationContext;
+import java.lang.reflect.Parameter;
+import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Resolves a translation key for a given reflective method invocation.
- * <p>
- * Implementations may rely on naming conventions, annotations, or other
- * context-dependent strategies.
- * </p>
+ * Strategy that converts a typed argument into a {@link ComponentLike} used as a translation argument.
+ *
+ * <p>Implementations should be side-effect-free and thread-safe.</p>
+ *
+ * @param <T> the value type supported by this renderer
  */
 @NullMarked
-@FunctionalInterface
-public interface TranslationKeyResolver {
+public interface TranslationArgumentRenderer<T> {
 
     /**
-     * Resolves the translation key for the provided invocation context.
+     * Renders the given argument into a {@link ComponentLike}.
      *
-     * @param context the method invocation context
-     * @return the translation key to be used for the invocation
+     * @param parameter the reflective parameter to which the argument belongs
+     * @param argument the source value to render
+     * @return the rendered component
      */
-    String resolve(InvocationContext context);
+    ComponentLike render(Parameter parameter, T argument);
 }

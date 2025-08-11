@@ -23,10 +23,10 @@
  */
 package io.github.namiuni.doburoku.internal.argument;
 
-import io.github.namiuni.doburoku.api.argument.ArgumentResolverRegistry;
-import io.github.namiuni.doburoku.api.argument.TranslationArgumentRenderer;
 import io.github.namiuni.doburoku.api.argument.TranslationArgumentResolver;
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
+import io.github.namiuni.doburoku.spi.argument.ArgumentResolverRegistry;
+import io.github.namiuni.doburoku.spi.argument.TranslationArgumentRenderer;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -57,12 +57,6 @@ public final class ArgumentResolverRegistryImpl implements TranslationArgumentRe
      * Creates a registry.
      */
     public ArgumentResolverRegistryImpl() {
-    }
-
-    @Override
-    public <T> ArgumentResolverRegistry plus(final Type type, final TranslationArgumentRenderer<T> renderer) {
-        this.argumentRenderers.put(type, renderer);
-        return this;
     }
 
     /**
@@ -105,5 +99,11 @@ public final class ArgumentResolverRegistryImpl implements TranslationArgumentRe
         );
 
         return renderer.render(parameter, argument);
+    }
+
+    @Override
+    public <T> ArgumentResolverRegistry plus(final Type type, final TranslationArgumentRenderer<T> renderer) {
+        this.argumentRenderers.put(type, renderer);
+        return this;
     }
 }

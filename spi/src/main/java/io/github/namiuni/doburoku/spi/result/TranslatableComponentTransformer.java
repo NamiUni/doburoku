@@ -21,27 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.api.key;
+package io.github.namiuni.doburoku.spi.result;
 
-import io.github.namiuni.doburoku.api.invocation.InvocationContext;
+import java.lang.reflect.Method;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Resolves a translation key for a given reflective method invocation.
- * <p>
- * Implementations may rely on naming conventions, annotations, or other
- * context-dependent strategies.
- * </p>
+ * Transforms a {@link TranslatableComponent} into an implementation-defined result type.
+ *
+ * <p>Implementations should be stateless and thread-safe.</p>
+ *
+ * @param <R> the result type produced by the transformer
  */
 @NullMarked
-@FunctionalInterface
-public interface TranslationKeyResolver {
+public interface TranslatableComponentTransformer<R> {
 
     /**
-     * Resolves the translation key for the provided invocation context.
+     * Handles the given translatable component to produce a result.
      *
-     * @param context the method invocation context
-     * @return the translation key to be used for the invocation
+     * @param method the method for which the component was created
+     * @param component the translatable component assembled for the invocation
+     * @return the transformed result
      */
-    String resolve(InvocationContext context);
+    R transform(Method method, TranslatableComponent component);
 }

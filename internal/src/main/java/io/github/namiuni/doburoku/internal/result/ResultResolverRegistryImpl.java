@@ -24,9 +24,9 @@
 package io.github.namiuni.doburoku.internal.result;
 
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
-import io.github.namiuni.doburoku.api.result.ResultResolverRegistry;
-import io.github.namiuni.doburoku.api.result.TranslatableComponentTransformer;
 import io.github.namiuni.doburoku.api.result.TranslationResultResolver;
+import io.github.namiuni.doburoku.spi.result.ResultResolverRegistry;
+import io.github.namiuni.doburoku.spi.result.TranslatableComponentTransformer;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -49,6 +49,12 @@ import org.jspecify.annotations.NullMarked;
 public final class ResultResolverRegistryImpl implements TranslationResultResolver, ResultResolverRegistry {
 
     private final Map<Type, TranslatableComponentTransformer<?>> transformers = new HashMap<>();
+
+    /**
+     * Creates a new instance.
+     */
+    public ResultResolverRegistryImpl() {
+    }
 
     /**
      * Resolves a result for the given invocation by building a {@link TranslatableComponent}

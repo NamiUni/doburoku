@@ -42,6 +42,8 @@ public final class DoburokuDrunkard {
     private final TranslationResultResolver resultResolver;
 
     /**
+     * Creates a new drunkard.
+     *
      * @param keyResolver      the key resolver
      * @param argumentResolver the argument resolver
      * @param resultResolver   the result resolver
