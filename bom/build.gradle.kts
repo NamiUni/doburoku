@@ -8,6 +8,8 @@ version = projectVersion
 
 dependencies {
     sequenceOf(
+        "annotation",
+        "annotation-processor",
         "api",
         "internal",
         "spi",
