@@ -10,13 +10,18 @@ Inspired by Moonshine, focusing on simplicity and just-enough power.
 ## Modules
 
 - doburoku-api  
-  Public API: annotations, SPIs, and interfaces.
-- doburoku-runtime  
-  Default implementations: step builder and standard resolvers/transformers.
+  Public API: annotations and interfaces.
+
+- doburoku-spi  
+  Public SPI: extension points for custom resolvers and integrations.
+
 - doburoku-internal  
   Internal details (subject to change; don’t depend on this directly).
 
-In most cases, depending on doburoku-runtime is sufficient (it brings doburoku-api transitively).
+- doburoku-standard  
+  Default implementations: step builder and standard resolvers/transformers.
+
+Tip: For most users, start with doburoku-standard.
 
 ## Requirements
 
@@ -26,8 +31,8 @@ In most cases, depending on doburoku-runtime is sufficient (it brings doburoku-a
 
 ## Installation
 
-
 Maven (add SNAPSHOT repository):
+
 
 ```xml
 <repositories>
@@ -40,7 +45,7 @@ Maven (add SNAPSHOT repository):
 <dependencies>
   <dependency>
     <groupId>io.github.namiuni</groupId>
-    <artifactId>doburoku-MODULE</artifactId>
+    <artifactId>ARTIFACT_ID</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
@@ -55,7 +60,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.namiuni:doburoku-MODULE:1.0.0-SNAPSHOT")
+    implementation("io.github.namiuni:ARTIFACT_ID:1.0.0-SNAPSHOT")
 }
 ```
 
@@ -96,7 +101,7 @@ audience.sendMessage(component);
 - Custom argument rendering
 ```java
 ...
-.argument(registry -> registry.plus(
+.argument((ArgumentResolverRegistry registry) -> registry.plus(
     Player.class,
     (parameter, player) -> player.displayName()
 ))
@@ -106,20 +111,12 @@ audience.sendMessage(component);
 - Result transformation (TranslatableComponent → any type)
 ```java
 ...
-.result(registry -> registry.plus(
+.result((ResultResolverRegistry registry) -> registry.plus(
     new TypeToken<Consumer<Audience>>() {},
     (method, component) -> audience -> audience.sendMessage(component)
 ))
 ```
 
-## Summary
-
-The advanced usage might seem a bit complex at first, but mastering it can significantly boost your development efficiency and keep your code clean. I hope this has conveyed some of its appeal\!
-
-We've also created a dedicated example plugin using Paper API and MiniPlaceholders. You can find it here, which might be helpful until the official wiki is ready:
-[https://github.com/NamiUni/doburoku-example](https://github.com/NamiUni/doburoku-example)
-
-Let's brew some doburoku\! (But in reality, brewing your own doburoku is illegal in Japan, so please don't do it\!)
 
 ## FAQ
 
@@ -133,3 +130,7 @@ If you have any questions, bug reports, or feature suggestions, feel free to joi
 
 * **Support:** [Discord](https://discord.gg/X9s7q9ps33)
 * **Bug Reports & Feature Requests:** [GitHub Issues](https://github.com/NamiUni/doburoku/issues)
+
+## License
+
+MIT License. See the LICENSE file for details.
