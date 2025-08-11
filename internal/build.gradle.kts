@@ -1,5 +1,6 @@
 plugins {
     id("doburoku.base")
+    id("doburoku.testing")
     id("doburoku.maven-publish")
 }
 
@@ -7,11 +8,5 @@ val projectVersion: String by project
 version = projectVersion
 
 dependencies {
-    sequenceOf(
-        "api",
-        "internal",
-        "runtime"
-    ).forEach {
-        api(project(":doburoku-$it"))
-    }
+    api(projects.doburokuApi)
 }

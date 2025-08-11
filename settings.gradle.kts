@@ -15,10 +15,10 @@ pluginManagement {
 }
 
 sequenceOf(
+    "api",
     "bom",
-    "common",
-    "core",
-    "standard"
+    "internal",
+    "runtime"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)

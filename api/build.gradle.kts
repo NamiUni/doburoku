@@ -7,11 +7,6 @@ val projectVersion: String by project
 version = projectVersion
 
 dependencies {
-    sequenceOf(
-        "api",
-        "internal",
-        "runtime"
-    ).forEach {
-        api(project(":doburoku-$it"))
-    }
+    compileOnlyApi(libs.adventure.api)
+    api(libs.geantyref)
 }
