@@ -15,11 +15,13 @@ pluginManagement {
 }
 
 sequenceOf(
+    "annotation",
+    "annotation-processor",
+    "api",
     "bom",
-    "service",
-    "service-common",
-    "service-internal",
-    "service-minimessage"
+    "internal",
+    "spi",
+    "standard"
 ).forEach {
     include("doburoku-$it")
     project(":doburoku-$it").projectDir = file(it)

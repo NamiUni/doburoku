@@ -12,6 +12,7 @@ java {
 
 checkstyle {
     toolVersion = libs.versions.checkstyle.get()
+    configDirectory = rootProject.file(".checkstyle")
 }
 
 spotless {

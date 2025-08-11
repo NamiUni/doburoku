@@ -1,39 +1,58 @@
-# Doburoku (濁酒, 濁醪, どぶろく) WIP
+# Doburoku (濁酒, 濁醪, どぶろく)
 
-A Java library to manage [Kyori/Adventure](https://github.com/KyoriPowered/adventure)'s `TranslatableComponent` in a [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) way. 
+A tiny Java library for working with Kyori Adventure’s TranslatableComponent in a DRY, safe, and extensible way.  
+Inspired by Moonshine, focusing on simplicity and just-enough power.
 
-Inspired by [Kyori/Moonshine](https://github.com/KyoriPowered/moonshine), Doburoku is a type of Japanese moonshine.
+- Simple: low learning curve with a step builder and a small set of concepts
+- Minimalist: delegates translation resource management to Adventure
+- Effective: covers common cases with a compact API
 
-## Features
+## Modules
 
-* **Simple**: Simpler than Moonshine.
-* **Minimalist**: Does not handle the management of translation resources.
-* **Effective**: While simple, it meets most of the needs that Moonshine addresses.
+- doburoku-api  
+  Public API: annotations and interfaces.
+
+- doburoku-spi  
+  Public SPI: extension points for custom resolvers and integrations.
+
+- doburoku-internal  
+  Internal details (subject to change; don’t depend on this directly).
+
+- doburoku-standard  
+  Default implementations: step builder and standard resolvers/transformers.
+
+Tip: For most users, start with doburoku-standard.
+
+## Requirements
+
+- Java 21+
+- adventure-api 4.24.0+
+- Currently SNAPSHOT: API may change without notice (add the snapshot repository)
 
 ## Installation
 
-This library requires Kyori's adventure-api version 4.24.0. It is currently a SNAPSHOT version and its API may change. It is available in the Maven Central snapshot repository.
+Maven (add SNAPSHOT repository):
 
-**`pom.xml`**
 
 ```xml
 <repositories>
-    <repository>
-        <id>sonatype-snapshots</id>
-        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-    </repository>
+  <repository>
+    <id>sonatype-snapshots</id>
+    <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+  </repository>
 </repositories>
 
 <dependencies>
-    <dependency>
-        <groupId>io.github.namiuni</groupId>
-        <artifactId>doburoku-reflect-core</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </dependency>
+  <dependency>
+    <groupId>io.github.namiuni</groupId>
+    <artifactId>ARTIFACT_ID</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </dependency>
 </dependencies>
 ```
 
-**`build.gradle.kts`**
+
+Gradle (Kotlin DSL):
 
 ```kotlin
 repositories {
@@ -41,112 +60,69 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.namiuni:doburoku-reflect-core:1.0.0-SNAPSHOT")
+    implementation("io.github.namiuni:ARTIFACT_ID:1.0.0-SNAPSHOT")
 }
 ```
 
-## Basic Usage
 
-First, you need to prepare a `Translator` or `TranslationStore`. It's easy to register a `TranslationStore` with the `GlobalTranslator`. For more details, refer to the official Adventure documentation: [https://docs.advntr.dev/localization.html](https://docs.advntr.dev/localization.html).
+## Quick Start
 
-Let's assume you have a resource bundle like this, and you have added its source to `GlobalTranslator`:
+1) Prepare Adventure localization  
+   Register a TranslationStore in the GlobalTranslator (see https://docs.advntr.dev/localization.html).
 
-**`simple_en_US.properties`**
-
+Example bundle (`messages_en_US.properties`):
 ```properties
 hello.world=Hello, world!
 ```
 
-Create a service interface with a return type of `Component`.
 
+2) Define a service interface
 ```java
 public interface SimpleService {
+    @Key("hello.world")
     Component helloWorld();
 }
 ```
 
-`DoburokuBrewery` is the entry point. By passing your service interface to `DoburokuBrewery.from(Class<?>)` and calling `brew()`, a dynamic proxy instance is 'brewed' for you.
 
+3) “Brew” the proxy and call it
 ```java
-SimpleService simpleService = DoburokuBrewery
-    .from(SimpleService.class)
-    .brew();
+SimpleService messages = Doburoku
+        .builder(SimpleService.class)
+        .brew();
+
+Component component = messages.helloWorld();
+audience.sendMessage(component);
 ```
 
-Now, when you call the `helloWorld()` method on the created proxy object, it will return a `TranslatableComponent` with the translation key `hello.world`. The method name is converted from camel case to a dot-separated key by default.
-
-```java
-Component message = simpleService.helloWorld();
-audience.sendMessage(message); // result: "Hello, world!"
-```
 
 ## Advanced Usage
 
-To demonstrate the full potential of this library, we'll use a more complex example with the Paper API. The following assumes a resource bundle with these patterns, already added to the `GlobalTranslator`.
-
-**`example_en_US.properties`**
-
-```properties
-example.join.message={0} came to brew doburoku! Total {1} brewers!!
-example.welcome.message=Welcome! {0}!!
-```
-
-Define a service interface:
-
+- Custom argument rendering
 ```java
-public interface ExampleService {
-    void joinMessage(Player player, int Count);
-    Consumer<Player> welcomeMessage(Player player);
-}
+...
+.argument((ArgumentResolverRegistry registry) -> registry.plus(
+    Player.class,
+    (parameter, player) -> player.displayName()
+))
 ```
 
-Now, let's brew the proxy with a more advanced configuration:
 
+- Result transformation (TranslatableComponent → any type)
 ```java
-ExampleService exampleService = DoburokuService
-    .from(ExampleService.class)
-    .translatable(DefaultTranslatableResolver.create("example"))
-    .argument(resolvers -> resolvers
-            .add(Player.class, player -> player.displayName())
-    )
-    .result(handlers -> handlers
-            .add(new TypeToken<Consumer<Audience>>() { }, component -> {
-                return audience -> audience.sendMessage(component);
-            })
-    )
-    .brew();
+...
+.result((ResultResolverRegistry registry) -> registry.plus(
+    new TypeToken<Consumer<Audience>>() {},
+    (method, component) -> audience -> audience.sendMessage(component)
+))
 ```
 
-### `DoburokuBrewery#translatable(TranslatableResolver)`
 
-This method configures how the translation key for a `TranslatableComponent` is resolved from a method. The default implementation, `DefaultTranslatableResolver`, converts the method name from camel case to a dot-separated key. You can use `DefaultTranslatableResolver.create("example")` to prepend a prefix, so `joinMessage` becomes `example.join.message`. You can also provide your own custom `TranslatableResolver` implementation.
+## FAQ
 
-### `DoburokuBrewery#argument(Consumer<ArgumentResolvers>)`
+**Q. Uh oh, someone saw me moonshining doburoku! What do I do now?**
 
-This method customizes how method arguments are resolved into `ComponentLike` objects for the `TranslatableComponent`'s arguments. You can add `ArgumentResolver`s for specific types. For types that are already `ComponentLike`, no resolver is needed. For other types, the library defaults to `String.valueOf()` and then wraps it in `Component.text()`. Here, we add a resolver to handle `Player` objects by converting them to their display name.
-
-### `DoburokuBrewery#result(Consumer<ComponentHandlers>)`
-
-This method defines how the generated `TranslatableComponent` is transformed into the method's return type. You can add `ComponentHandler`s for specific return types. If a handler for a return type is not provided, calling the method will throw an `IllegalStateException`. In this example, we've added a handler for Consumer<Audience> to return a message consumer.
-### Final Invocation
-
-Now, you can use the `ExampleService` object as follows:
-
-```java
-// example result: Welcome! Unitarou!!
-// perform: brewer.sendMessage(ComponentLike);
-Consumer<Audience> welcomeSender = exampleService.welcomeMessage(brewer);
-welcomeSender.accept(brewer);
-```
-
-## Summary
-
-The advanced usage might seem a bit complex at first, but mastering it can significantly boost your development efficiency and keep your code clean. I hope this has conveyed some of its appeal\!
-
-We've also created a dedicated example plugin using Paper API and MiniPlaceholders. You can find it here, which might be helpful until the official wiki is ready:
-[https://github.com/NamiUni/doburoku-example](https://github.com/NamiUni/doburoku-example)
-
-Let's brew some doburoku\! (But in reality, brewing your own doburoku is illegal in Japan, so please don't do it\!)
+A. Just take a deep breath, have a small drink of your doburoku, and relax.
 
 ## Support & Community
 
@@ -155,8 +131,6 @@ If you have any questions, bug reports, or feature suggestions, feel free to joi
 * **Support:** [Discord](https://discord.gg/X9s7q9ps33)
 * **Bug Reports & Feature Requests:** [GitHub Issues](https://github.com/NamiUni/doburoku/issues)
 
-## FAQ
+## License
 
-**Q. Uh oh, someone saw me moonshining doburoku! What do I do now?**
-
-A. Just take a deep breath, have a small drink of your doburoku, and relax.
+MIT License. See the LICENSE file for details.
