@@ -3,4 +3,4 @@
  *
  * <p>Includes an annotation-based resolver that reads keys from {@code @Key}.</p>
  */
-package io.github.namiuni.doburoku.internal.key;
+package io.github.namiuni.doburoku.standard.key;

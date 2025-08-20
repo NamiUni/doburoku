@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.internal.key;
+package io.github.namiuni.doburoku.standard.key;
 
 import io.github.namiuni.doburoku.annotation.annotations.Key;
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
 import io.github.namiuni.doburoku.api.key.TranslationKeyResolver;
-import io.github.namiuni.doburoku.spi.exception.MissingTranslationKeyException;
+import io.github.namiuni.doburoku.standard.key.exception.MissingTranslationKeyException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

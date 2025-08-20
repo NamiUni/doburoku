@@ -19,8 +19,8 @@ sequenceOf(
     "annotation-processor",
     "api",
     "bom",
+    "core",
     "internal",
-    "spi",
     "standard"
 ).forEach {
     include("doburoku-$it")

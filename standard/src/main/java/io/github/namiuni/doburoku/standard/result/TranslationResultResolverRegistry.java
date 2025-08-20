@@ -21,23 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.internal.result;
+package io.github.namiuni.doburoku.standard.result;
 
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
 import io.github.namiuni.doburoku.api.result.TranslationResultResolver;
-import io.github.namiuni.doburoku.spi.result.ResultResolverRegistry;
-import io.github.namiuni.doburoku.spi.result.TranslatableComponentTransformer;
+import io.leangen.geantyref.TypeToken;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Default implementation of {@link TranslationResultResolver}.
+ * Thread-safe implementation of {@link TranslationResultResolver}.
  *
  * <p>Builds a {@link TranslatableComponent} from a key and arguments, then adapts it via a
  * registered {@link TranslatableComponentTransformer} based on the method's return type.
@@ -46,14 +45,14 @@ import org.jspecify.annotations.NullMarked;
  * <p>This type is internal and may change without notice.</p>
  */
 @NullMarked
-public final class ResultResolverRegistryImpl implements TranslationResultResolver, ResultResolverRegistry {
+public final class TranslationResultResolverRegistry implements TranslationResultResolver {
 
-    private final Map<Type, TranslatableComponentTransformer<?>> transformers = new HashMap<>();
+    private final Map<Type, TranslatableComponentTransformer<?>> transformers = new ConcurrentHashMap<>();
 
     /**
      * Creates a new instance.
      */
-    public ResultResolverRegistryImpl() {
+    public TranslationResultResolverRegistry() {
     }
 
     /**
@@ -90,9 +89,40 @@ public final class ResultResolverRegistryImpl implements TranslationResultResolv
         throw new IllegalStateException("No result handler found for return type: %s".formatted(type));
     }
 
-    @Override
-    public <T> ResultResolverRegistry plus(final Type type, final TranslatableComponentTransformer<T> transformer) {
+    /**
+     * Registers a transformer for a return type.
+     *
+     * @param <T> the result type
+     * @param type the raw class to associate with the transformer
+     * @param transformer the transformer to register
+     * @return this registry for chaining
+     */
+    public <T> TranslationResultResolverRegistry plus(final Type type, final TranslatableComponentTransformer<T> transformer) {
         this.transformers.put(type, transformer);
         return this;
+    }
+
+    /**
+     * Registers a transformer for a raw return type.
+     *
+     * @param <T>         the result type
+     * @param type        the raw class to associate with the transformer
+     * @param transformer the transformer to register
+     * @return this registry for chaining
+     */
+    public <T> TranslationResultResolverRegistry plus(final Class<T> type, final TranslatableComponentTransformer<T> transformer) {
+        return this.plus((Type) type, transformer);
+    }
+
+    /**
+     * Registers a transformer for a generic return type.
+     *
+     * @param <T>         the result type
+     * @param type        the generic type token
+     * @param transformer the transformer to register
+     * @return this registry for chaining
+     */
+    public <T> TranslationResultResolverRegistry plus(final TypeToken<T> type, final TranslatableComponentTransformer<T> transformer) {
+        return this.plus(type.getType(), transformer);
     }
 }

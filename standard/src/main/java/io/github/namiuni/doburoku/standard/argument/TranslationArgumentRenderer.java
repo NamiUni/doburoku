@@ -21,26 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.spi.argument;
+package io.github.namiuni.doburoku.standard.argument;
 
 import java.lang.reflect.Parameter;
 import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Post-processes rendered translation arguments.
+ * Strategy that converts a typed argument into a {@link ComponentLike} used as a translation argument.
  *
- * <p>Implementations may wrap or adjust the component based on {@link Parameter} metadata and should be side-effect-free.</p>
+ * <p>Implementations should be side-effect-free and thread-safe.</p>
+ *
+ * @param <T> the value type supported by this renderer
  */
 @NullMarked
-public interface TranslationArgumentTransformer {
+public interface TranslationArgumentRenderer<T> {
 
     /**
-     * Transforms a rendered argument component, optionally using parameter metadata.
+     * Renders the given argument into a {@link ComponentLike}.
      *
      * @param parameter the reflective parameter to which the argument belongs
-     * @param argument  the already-rendered component for the argument
-     * @return the transformed component
+     * @param argument the source value to render
+     * @return the rendered component
      */
-    ComponentLike transform(Parameter parameter, ComponentLike argument);
+    ComponentLike render(Parameter parameter, T argument);
 }

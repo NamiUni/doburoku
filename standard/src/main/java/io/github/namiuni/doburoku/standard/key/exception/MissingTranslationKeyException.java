@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.spi.exception;
+package io.github.namiuni.doburoku.standard.key.exception;
 
 import org.jspecify.annotations.NullMarked;
 
