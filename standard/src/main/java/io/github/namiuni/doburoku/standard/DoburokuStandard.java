@@ -28,31 +28,30 @@ import io.github.namiuni.doburoku.api.key.TranslationKeyResolver;
 import io.github.namiuni.doburoku.api.result.TranslationResultResolver;
 import io.github.namiuni.doburoku.internal.DoburokuDrunkard;
 import io.github.namiuni.doburoku.internal.DoburokuProxyFactory;
-import io.github.namiuni.doburoku.internal.argument.ArgumentResolverRegistryImpl;
-import io.github.namiuni.doburoku.internal.key.AnnotationKeyResolver;
-import io.github.namiuni.doburoku.internal.result.ResultResolverRegistryImpl;
-import io.github.namiuni.doburoku.spi.DoburokuBuilder;
-import io.github.namiuni.doburoku.spi.argument.ArgumentResolverRegistry;
-import io.github.namiuni.doburoku.spi.argument.TranslationArgumentTransformer;
-import io.github.namiuni.doburoku.spi.result.ResultResolverRegistry;
+import io.github.namiuni.doburoku.spi.Doburoku;
+import io.github.namiuni.doburoku.standard.argument.TranslationArgumentRegistry;
+import io.github.namiuni.doburoku.standard.argument.TranslationArgumentTransformer;
+import io.github.namiuni.doburoku.standard.key.AnnotationKeyResolver;
+import io.github.namiuni.doburoku.standard.result.TranslationResultResolverRegistry;
 import java.util.Objects;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 /**
  * Factory for creating dynamic proxies of service interfaces.
  *
  * <p>Provides a standard builder to configure how method calls on a target interface are processed
  * into {@link TranslatableComponent} instances. Unset options fall back to sensible defaults.</p>
+ *
+ * @param <I> the service interface type
  */
 @NullMarked
-public final class DoburokuStandard {
+public final class DoburokuStandard<I> extends Doburoku<DoburokuStandard<I>, I> {
 
-    private DoburokuStandard() {
-        throw new UnsupportedOperationException();
+    private DoburokuStandard(final Class<I> serviceInterface) {
+        super(serviceInterface);
     }
 
     /**
@@ -63,153 +62,65 @@ public final class DoburokuStandard {
      * @return a new builder instance
      * @throws IllegalArgumentException if the given class is not an interface
      */
-    public static <I> Builder<I> builder(final Class<I> serviceInterface) throws IllegalArgumentException {
-        return new Builder<>(serviceInterface);
+    public static <I> DoburokuStandard<I> of(final Class<I> serviceInterface) {
+        return new DoburokuStandard<>(serviceInterface);
     }
 
     /**
-     * Builder for configuring a dynamic proxy.
+     * Configures an {@link TranslationArgumentRegistry} using a consumer function.
      *
-     * @param <I> the service interface type
+     * @param configurator a consumer that configures the registry
+     * @return this builder
      */
-    public static final class Builder<I> implements DoburokuBuilder<I, Builder<I>> {
+    public DoburokuStandard<I> argument(final Consumer<TranslationArgumentRegistry> configurator) {
+        final TranslationArgumentRegistry registry = new TranslationArgumentRegistry();
+        configurator.accept(registry);
+        return this.argument(registry);
+    }
 
-        private final Class<I> serviceInterface;
-        private @Nullable TranslationKeyResolver keyResolver;
-        private @Nullable TranslationArgumentResolver argumentResolver;
-        private @Nullable TranslationResultResolver resultResolver;
+    /**
+     * Configures an {@link TranslationArgumentRegistry} with a transformer and additional configuration.
+     *
+     * @param configurator a consumer that configures the registry
+     * @param transformer  the argument transformer to apply to all rendered components
+     * @return this builder
+     */
+    public DoburokuStandard<I> argument(
+            final Consumer<TranslationArgumentRegistry> configurator,
+            final TranslationArgumentTransformer transformer
+    ) {
+        final TranslationArgumentRegistry registry = new TranslationArgumentRegistry();
+        configurator.accept(registry);
 
-        private Builder(final Class<I> serviceInterface) {
-            Objects.requireNonNull(serviceInterface, "serviceInterface must not be null");
-            if (!serviceInterface.isInterface()) {
-                throw new IllegalArgumentException("serviceInterface must be an interface: " + serviceInterface.getName());
+        return this.argument(context -> {
+            final ComponentLike[] components = registry.resolve(context);
+            for (int i = 0; i < components.length; i++) {
+                components[i] = transformer.transform(context.arguments()[i].parameter(), components[i]);
             }
-            this.serviceInterface = serviceInterface;
-        }
+            return components;
+        });
+    }
 
-        /**
-         * Sets the resolver used to determine translation keys for method invocations.
-         *
-         * @param keyResolver the key resolver implementation
-         * @return this builder
-         */
-        @Override
-        public Builder<I> key(final TranslationKeyResolver keyResolver) {
-            Objects.requireNonNull(keyResolver, "keyResolver");
-            this.keyResolver = keyResolver;
-            return this;
-        }
+    /**
+     * Configures a {@link TranslationResultResolverRegistry} using a consumer function.
+     *
+     * @param configurator a consumer that configures the registry
+     * @return this builder
+     */
+    public DoburokuStandard<I> result(final Consumer<TranslationResultResolverRegistry> configurator) {
+        final TranslationResultResolverRegistry registry = new TranslationResultResolverRegistry();
+        configurator.accept(registry);
+        return this.result(registry);
+    }
 
-        /**
-         * Sets the resolver that renders method arguments into translation components.
-         *
-         * @param argumentResolver the argument resolver implementation
-         * @return this builder
-         */
-        @Override
-        public Builder<I> argument(final TranslationArgumentResolver argumentResolver) {
-            Objects.requireNonNull(argumentResolver, "argumentResolver");
-            this.argumentResolver = argumentResolver;
-            return this;
-        }
+    @Override
+    public I brew() {
+        final Class<I> service = Objects.requireNonNull(this.serviceInterface);
+        final TranslationKeyResolver key = Objects.requireNonNullElse(this.keyResolver, new AnnotationKeyResolver());
+        final TranslationArgumentResolver argument = Objects.requireNonNullElse(this.argumentResolver, new TranslationArgumentRegistry());
+        final TranslationResultResolver result = Objects.requireNonNullElse(this.resultResolver, new TranslationResultResolverRegistry());
 
-        /**
-         * Sets the resolver and applies a transformer to all rendered components.
-         *
-         * @param argumentResolver the base argument resolver implementation
-         * @param transformer      the transformer to apply to all rendered components
-         * @return this builder
-         */
-        public Builder<I> argument(
-                final TranslationArgumentResolver argumentResolver,
-                final TranslationArgumentTransformer transformer
-        ) {
-            return this.argument(context -> {
-                final ComponentLike[] components = argumentResolver.resolve(context);
-                for (int i = 0; i < components.length; i++) {
-                    components[i] = transformer.transform(context.arguments()[i].parameter(), components[i]);
-                }
-                return components;
-            });
-        }
-
-        /**
-         * Configures an {@link ArgumentResolverRegistry} using a consumer function.
-         *
-         * @param configurator a consumer that configures the registry
-         * @return this builder
-         */
-        public Builder<I> argument(final Consumer<ArgumentResolverRegistry> configurator) {
-            final ArgumentResolverRegistryImpl registry = new ArgumentResolverRegistryImpl();
-            configurator.accept(registry);
-            return this.argument(registry);
-        }
-
-        /**
-         * Configures an {@link ArgumentResolverRegistry} with a transformer and additional configuration.
-         *
-         * @param configurator a consumer that configures the registry
-         * @param transformer  the argument transformer to apply to all rendered components
-         * @return this builder
-         */
-        public Builder<I> argument(
-                final Consumer<ArgumentResolverRegistry> configurator,
-                final TranslationArgumentTransformer transformer
-        ) {
-            final ArgumentResolverRegistryImpl registry = new ArgumentResolverRegistryImpl();
-            configurator.accept(registry);
-            return this.argument(registry, transformer);
-        }
-
-        /**
-         * Sets the resolver that produces the final translation result.
-         *
-         * @param resultResolver the result resolver implementation
-         * @return this builder
-         */
-        @Override
-        public Builder<I> result(final TranslationResultResolver resultResolver) {
-            Objects.requireNonNull(resultResolver, "resultResolver");
-            this.resultResolver = resultResolver;
-            return this;
-        }
-
-        /**
-         * Configures a {@link ResultResolverRegistry} using a consumer function.
-         *
-         * @param configurator a consumer that configures the registry
-         * @return this builder
-         */
-        public Builder<I> result(final Consumer<ResultResolverRegistry> configurator) {
-            final ResultResolverRegistryImpl registry = new ResultResolverRegistryImpl();
-            configurator.accept(registry);
-            return this.result(registry);
-        }
-
-        /**
-         * Builds and returns a dynamic proxy that implements the configured service interface.
-         *
-         * <p>Unset options fall back to defaults.</p>
-         *
-         * @return a proxy implementing the service interface
-         */
-        @Override
-        public I brew() {
-            final TranslationKeyResolver key = Objects.requireNonNullElseGet(
-                    this.keyResolver,
-                    AnnotationKeyResolver::new
-            );
-            final TranslationArgumentResolver args = Objects.requireNonNullElseGet(
-                    this.argumentResolver,
-                    ArgumentResolverRegistryImpl::new
-            );
-            final TranslationResultResolver result = Objects.requireNonNullElseGet(
-                    this.resultResolver,
-                    ResultResolverRegistryImpl::new
-            );
-
-            final DoburokuDrunkard drunkard = new DoburokuDrunkard(key, args, result);
-            return DoburokuProxyFactory.of(drunkard).create(this.serviceInterface);
-        }
+        final DoburokuDrunkard drunkard = new DoburokuDrunkard(key, argument, result);
+        return DoburokuProxyFactory.of(drunkard).create(service);
     }
 }

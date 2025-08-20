@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.namiuni.doburoku.internal.argument;
+package io.github.namiuni.doburoku.standard.argument;
 
 import io.github.namiuni.doburoku.api.argument.TranslationArgumentResolver;
 import io.github.namiuni.doburoku.api.invocation.InvocationContext;
-import io.github.namiuni.doburoku.spi.argument.ArgumentResolverRegistry;
-import io.github.namiuni.doburoku.spi.argument.TranslationArgumentRenderer;
+import io.leangen.geantyref.TypeToken;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -37,7 +36,7 @@ import net.kyori.adventure.text.ComponentLike;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Thread-safe implementation of {@link TranslationArgumentResolver} and {@link ArgumentResolverRegistry}.
+ * Thread-safe implementation of {@link TranslationArgumentResolver}.
  *
  * <p>Renders method arguments into {@link ComponentLike} using a registry of type-specific renderers.
  * By default, {@link ComponentLike} values are passed through as-is, and other values are converted
@@ -46,7 +45,7 @@ import org.jspecify.annotations.NullMarked;
  * <p>This type is internal and may change without notice.</p>
  */
 @NullMarked
-public final class ArgumentResolverRegistryImpl implements TranslationArgumentResolver, ArgumentResolverRegistry {
+public final class TranslationArgumentRegistry implements TranslationArgumentResolver {
 
     private static final TranslationArgumentRenderer<Object> DEFAULT_RENDERER = (parameter, argument) -> Component.text(String.valueOf(argument));
     private static final TranslationArgumentRenderer<ComponentLike> COMPONENT_RENDERER = (parameter, argument) -> argument;
@@ -56,7 +55,7 @@ public final class ArgumentResolverRegistryImpl implements TranslationArgumentRe
     /**
      * Creates a registry.
      */
-    public ArgumentResolverRegistryImpl() {
+    public TranslationArgumentRegistry() {
     }
 
     /**
@@ -101,9 +100,40 @@ public final class ArgumentResolverRegistryImpl implements TranslationArgumentRe
         return renderer.render(parameter, argument);
     }
 
-    @Override
-    public <T> ArgumentResolverRegistry plus(final Type type, final TranslationArgumentRenderer<T> renderer) {
+    /**
+     * Registers a renderer for the given type.
+     *
+     * @param <T> the type to render
+     * @param type the type to associate with the renderer
+     * @param renderer the renderer implementation
+     * @return this registry for chaining
+     */
+    public <T> TranslationArgumentRegistry plus(final Type type, final TranslationArgumentRenderer<T> renderer) {
         this.argumentRenderers.put(type, renderer);
         return this;
+    }
+
+    /**
+     * Registers a renderer for the given raw type.
+     *
+     * @param <T>      the type to render
+     * @param type     the raw class to associate with the renderer
+     * @param renderer the renderer implementation
+     * @return this registry for chaining
+     */
+    public <T> TranslationArgumentRegistry plus(final Class<T> type, final TranslationArgumentRenderer<T> renderer) {
+        return this.plus((Type) type, renderer);
+    }
+
+    /**
+     * Registers a renderer for the given generic type.
+     *
+     * @param <T>      the type to render
+     * @param type     the generic type token
+     * @param renderer the renderer implementation
+     * @return this registry for chaining
+     */
+    public <T> TranslationArgumentRegistry plus(final TypeToken<T> type, final TranslationArgumentRenderer<T> renderer) {
+        return this.plus(type.getType(), renderer);
     }
 }

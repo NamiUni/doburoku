@@ -8,5 +8,5 @@ val projectVersion: String by project
 version = projectVersion
 
 dependencies {
-    compileOnlyApi(projects.doburokuSpi)
+    compileOnlyApi(projects.doburokuApi)
 }

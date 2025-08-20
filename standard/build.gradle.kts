@@ -8,7 +8,6 @@ val projectVersion: String by project
 version = projectVersion
 
 dependencies {
-    api(projects.doburokuSpi)
-    implementation(projects.doburokuInternal)
+    api(projects.doburokuCore)
     compileOnlyApi(libs.adventure.text.minimessage)
 }

@@ -1,4 +1,4 @@
 /**
  * Exception types shared across SPI integrations.
  */
-package io.github.namiuni.doburoku.spi.exception;
+package io.github.namiuni.doburoku.standard.key.exception;

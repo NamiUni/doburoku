@@ -11,8 +11,8 @@ dependencies {
         "annotation",
         "annotation-processor",
         "api",
+        "core",
         "internal",
-        "spi",
         "standard"
     ).forEach {
         api(project(":doburoku-$it"))
