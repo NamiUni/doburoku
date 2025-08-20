@@ -9,17 +9,17 @@ Inspired by Moonshine, focusing on simplicity and just-enough power.
 
 ## Modules
 
-- doburoku-api  
+- doburoku-api
   Public API: annotations and interfaces.
-
-- doburoku-spi  
-  Public SPI: extension points for custom resolvers and integrations.
 
 - doburoku-internal  
   Internal details (subject to change; don’t depend on this directly).
 
+- doburoku-core
+  For those who want to write their own implementation.
+
 - doburoku-standard  
-  Default implementations: step builder and standard resolvers/transformers.
+  Standard implementations.
 
 Tip: For most users, start with doburoku-standard.
 
@@ -87,8 +87,7 @@ public interface SimpleService {
 
 3) “Brew” the proxy and call it
 ```java
-SimpleService messages = Doburoku
-        .builder(SimpleService.class)
+SimpleService messages = DoburokuStandard.of(SimpleService.class)
         .brew();
 
 Component component = messages.helloWorld();
@@ -98,10 +97,10 @@ audience.sendMessage(component);
 
 ## Advanced Usage
 
-- Custom argument rendering
+- Custom argument rendering ((any type → ComponentLike))
 ```java
 ...
-.argument((ArgumentResolverRegistry registry) -> registry.plus(
+.argument(registry -> registry.plus(
     Player.class,
     (parameter, player) -> player.displayName()
 ))
@@ -111,7 +110,7 @@ audience.sendMessage(component);
 - Result transformation (TranslatableComponent → any type)
 ```java
 ...
-.result((ResultResolverRegistry registry) -> registry.plus(
+.result(registry -> registry.plus(
     new TypeToken<Consumer<Audience>>() {},
     (method, component) -> audience -> audience.sendMessage(component)
 ))
