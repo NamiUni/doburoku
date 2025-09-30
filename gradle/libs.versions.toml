@@ -11,7 +11,7 @@ geantyref = "2.0.1"
 adventure = "4.24.0"
 
 # Test
-junit = "5.13.4"
+junit = "6.0.0"
 google-compile-testing = "0.21.0"
 
 [libraries]
