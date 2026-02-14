@@ -12,7 +12,7 @@ adventure = "4.24.0"
 
 # Test
 junit = "5.13.4"
-google-compile-testing = "0.21.0"
+google-compile-testing = "0.23.0"
 
 [libraries]
 # Tool
